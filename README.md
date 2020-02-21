@@ -1,7 +1,9 @@
+(some links not working for OVRO-LWA; wiki works!)
+
 # LEDA Documentation
 
 * [LEDA website](http://www.ledatelescope.org)
-* [LEDA wiki (github)](https://github.com/ledatelescope/leda_docs/wiki)
+* [LEDA wiki (github)](https://github.com/ovro-lwa/leda_docs/wiki)
 * [LEDA wiki (tWiki)](https://www.cfa.harvard.edu/twiki5/view/LEDA/LEDA)
 * [Photos and images](https://github.com/ledatelescope/leda_docs/blob/master/images/photos/README.md)
 
