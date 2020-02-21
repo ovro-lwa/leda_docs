@@ -1,0 +1,72 @@
+\begin{thebibliography}{}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Alexov et~al.(2012)}]{2012ASPC..461..283A}
+Alexov, A., et~al. 2012, in ADASS XXI, 283
+
+\bibitem[{Cotton et~al.(1995)Cotton, Tody, \& Pence}]{Cotton1995}
+Cotton, W.~D., Tody, D., \& Pence, W.~D. 1995, A\&A Supplement, 113, 159
+
+\bibitem[{Greisen(2012)}]{Greisen:2012tw}
+Greisen, E.~W. 2012, AIPS Memorandum Series, 117, 1
+
+\bibitem[{Greisen \& Harten(1981)}]{1981A&AS...44..371G}
+Greisen, E.~W., \& Harten, R.~H. 1981, A\&A Supplement, 44, 371
+
+\bibitem[{Greisen et~al.(1980)Greisen, Wells, \& Harten}]{1980SPIE..264..298G}
+Greisen, E.~W., Wells, D.~C., \& Harten, R.~H. 1980, Applications of Digital
+  Image Processing to Astronomy, 264, 298
+
+\bibitem[{Griesen(2008)}]{Griesen:2008tn}
+Griesen, E.~W. 2008, AIPS Memorandum Series, 114
+
+\bibitem[{Harten et~al.(1988)}]{Harten1998}
+Harten, R.~H., et~al. 1988, A\&A Supplement, 73, 365
+
+\bibitem[{Jenness et~al.(2014)}]{Jenness:2014wy}
+Jenness, T., et~al. 2014, Astronomy and Computing, 1
+
+\bibitem[{Jennings et~al.(1995)Jennings, Pence, \& Folk}]{Jennings1995}
+Jennings, D.~G., Pence, W.~D., \& Folk, M. 1995, ADASS IV, 77, 229
+
+\bibitem[{Kemball \& Wieringa(2001)}]{Kemball:2001um}
+Kemball, A.~J., \& Wieringa, M.~H. 2001, CASA Memo Series
+
+\bibitem[{Kitaeff et~al.(2014)Kitaeff, Cannon, Wicenec, \&
+  Taubman}]{Kitaeff:2014ua}
+Kitaeff, V.~V., Cannon, A., Wicenec, A., \& Taubman, D. 2014, arXiv.org.
+  \eprint{1403.2801v4}
+
+\bibitem[{Kocz et~al.(2014)}]{Kocz:2014jr}
+Kocz, J., et~al. 2014, Journal of Astronomical Instrumentation, 03, 1450002
+
+\bibitem[{Masters et~al.(2012)}]{2012ASPC..461..871M}
+Masters, J., et~al. 2012, in ADASS XXI, 871
+
+\bibitem[{Pence(2002)}]{2002SPIE.4847..444P}
+Pence, W.~D. 2002, Astronomical Data Analysis II. Edited by Starck, 4847, 444
+
+\bibitem[{Pence et~al.(2010)}]{2010A&A...524A..42P}
+Pence, W.~D., et~al. 2010, A\&A, 524, 42
+
+\bibitem[{Thomas et~al.(2001)Thomas, Shaya, \& Cheung}]{2001ASPC..238..487T}
+Thomas, B., Shaya, E., \& Cheung, C. 2001, ADASS X, 238, 487
+
+\bibitem[{Thomas et~al.(2014{\natexlab{a}})}]{2014ASPC..485..351T}
+Thomas, B., et~al. 2014{\natexlab{a}}, in ADASS XXIII, 351
+
+\bibitem[{Thomas et~al.(2014{\natexlab{b}})}]{Thomas:2014vq}
+--- 2014{\natexlab{b}}, Astronomy and Computing, 1
+
+\bibitem[{Wells \& Greisen(1979)}]{1979ipia.coll..445W}
+Wells, D.~C., \& Greisen, E.~W. 1979, in 5th Workshop on Image Processing in
+  Astronomy, 445
+
+\bibitem[{Wise et~al.(2011)}]{2011ASPC..442..663W}
+Wise, M., et~al. 2011, in ADASS XX, 663
+
+\end{thebibliography}

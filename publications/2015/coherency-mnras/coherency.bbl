@@ -1,0 +1,120 @@
+\begin{thebibliography}{33}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Baars {et~al}\mbox{.}(1977)Baars, Genzel, Pauliny-Toth, \&
+  Witzel}]{Baars:1977}
+Baars J. W.~M., Genzel R., Pauliny-Toth I. I.~K., Witzel A., 1977, A\&A, 61, 99
+
+\bibitem[{Barakat(1963)}]{Barakat:1963}
+Barakat R., 1963, J. Opt. Soc. Am., 53, 317
+
+\bibitem[{Baylis {et~al}\mbox{.}(1993)Baylis, Bonenfant, \&
+  Derbyshire}]{Baylis:1993}
+Baylis W.~E., Bonenfant J., Derbyshire J., 1993, Am. J. Phys., 61, 534
+
+\bibitem[{Bergman {et~al}\mbox{.}(2005)Bergman, {\AA}hl{\'e}n, St{\aa}l,
+  Thid{\'e}, Ananthakrishnan, Wahlund, Karlsson, Puccio, Carozzi, \&
+  Kale}]{Bergman:2005p7825}
+Bergman J. E.~S. {et~al.}, 2005, arXiv, astro-ph/0509864
+
+\bibitem[{Bergman \& Carozzi(2008)}]{Bergman:2008p7859}
+Bergman J. E.~S., Carozzi T.~D., 2008, arXiv, astro-ph/0804.2092
+
+\bibitem[{Bowman \& Rogers(2010)}]{Bowman:2010}
+Bowman J., Rogers A., 2010, Nature, 468, 796
+
+\bibitem[{Carozzi \& Bergman(2006)}]{Carozzi:2006bj}
+Carozzi T.~D., Bergman J. E.~S., 2006, J. Mat. Phys., 47, 2903
+
+\bibitem[{Carozzi \& Woan(2009)}]{Carozzi:2009hf}
+Carozzi T.~D., Woan G., 2009, MNRAS, 395, 1558
+
+\bibitem[{Cocke \& Holm(1972)}]{cocke:1972}
+Cocke W.~J., Holm D.~A., 1972, Nature Physical Science, 240, 161
+
+\bibitem[{Faria(2002)}]{BrandaoFaria2002}
+Faria J. A.~B., 2002, Microwave and Optical Technology Letters, 33, 151
+
+\bibitem[{Greenhill \& Bernardi(2012)}]{leda2012}
+Greenhill L.~J., Bernardi G., 2012, in NARIT Conf. Ser., Komonjinda S.~S.,
+  Kovalev Y.~Y., Ruffolo D., eds., Vol.~1
+
+\bibitem[{Hamaker(2000)}]{Hamaker:2000p7625}
+Hamaker J.~P., 2000, A\&A Supp., 143, 515
+
+\bibitem[{Hamaker(2006)}]{Hamaker:2006p7626}
+Hamaker J.~P., 2006, A\&A, 456, 395
+
+\bibitem[{Hamaker \& Bregman(1996)}]{Hamaker:1996p5733}
+Hamaker J.~P., Bregman J.~D., 1996, A\&A Supp., 117, 161
+
+\bibitem[{Hamaker {et~al}\mbox{.}(1996)Hamaker, Bregman, \&
+  Sault}]{Hamaker:1996p5735}
+Hamaker J.~P., Bregman J.~D., Sault R.~J., 1996, A\&A Supp., 117, 137
+
+\bibitem[{Han {et~al}\mbox{.}(1997{\natexlab{a}})Han, Kim, \&
+  Noz}]{Han:1997stokes}
+Han D., Kim Y., Noz M., 1997{\natexlab{a}}, Phys. Rev. E, 56, 6065
+
+\bibitem[{Han {et~al}\mbox{.}(1997{\natexlab{b}})Han, Kim, \&
+  Noz}]{Han:1997jones}
+Han D., Kim Y.~S., Noz M.~E., 1997{\natexlab{b}}, J. Opt. Soc. Am., 14, 2290
+
+\bibitem[{Jones(1941)}]{Jones1941}
+Jones R.~C., 1941, J. Opt. Soc. Am., 31, 1
+
+\bibitem[{Kellermann(2009)}]{Kellermann:2009}
+Kellermann K.~I., 2009, A{\&}A, 500, 143
+
+\bibitem[{Mandel \& Wolf(1995)}]{BookMandelWolf}
+Mandel L., Wolf E., 1995, Optical Coherence and Quantum Optics, 1st edn.
+  Cambridge University Press
+
+\bibitem[{Mueller(1948)}]{Mueller1948}
+Mueller H., 1948, J. Opt. Soc. Am., 38, 661
+
+\bibitem[{{Noordam}(1996)}]{JEN:note185}
+{Noordam} J.~E., 1996, {AIPS++ Note 185}. Tech. rep., AIPS++
+
+\bibitem[{Pozar(2005)}]{Pozar2005}
+Pozar D.~M., 2005, Microwave Engineering, 3rd edn. John Wiley and Sons Inc.
+
+\bibitem[{Rogers \& Bowman(2012)}]{Rogers:2012hd}
+Rogers A. E.~E., Bowman J.~D., 2012, Radio Science, 47, RS0K06
+
+\bibitem[{Sault {et~al}\mbox{.}(1991)Sault, Killeen, \&
+  Kesteven}]{Sault-AT-Calibration}
+Sault R., Killeen N., Kesteven M., 1991, {AT polarisation calibration}. Tech.
+  Rep. 39.3/015, ATNF
+
+\bibitem[{Sault {et~al}\mbox{.}(1996)Sault, Hamaker, \&
+  Bregman}]{Sault:1996p5731}
+Sault R.~J., Hamaker J.~P., Bregman J.~D., 1996, A\&A Supp., 117, 149
+
+\bibitem[{Smirnov(2011{\natexlab{a}})}]{Smirnov:2011a}
+Smirnov O.~M., 2011{\natexlab{a}}, A\&A, 527, A106
+
+\bibitem[{Smirnov(2011{\natexlab{b}})}]{Smirnov:2011d}
+Smirnov O.~M., 2011{\natexlab{b}}, A\&A, 531, A159
+
+\bibitem[{{Sparks} {et~al}\mbox{.}(1992){Sparks}, {Fraix-Burnet}, {Macchetto},
+  \& {Owen}}]{Sparks1992}
+{Sparks} W.~B., {Fraix-Burnet} D., {Macchetto} F., {Owen} F.~N., 1992, Nature,
+  355, 804
+
+\bibitem[{Taylor {et~al}\mbox{.}(1999)Taylor, Carilli, \& Perley}]{Taylor1999}
+Taylor G.~B., Carilli C.~L., Perley R.~A., eds., 1999, Synthesis Imaging in
+  Radio Astronomy II, Vol. 180. ASP
+
+\bibitem[{Thompson {et~al}\mbox{.}(2004)Thompson, Moran, \&
+  Jr.}]{ThompsonMoranSwenson2004}
+Thompson A.~R., Moran J.~M., Jr. G. W.~S., 2004, Interferometry and Synthesis
+  in Radio Astronomy, 2nd edn. WILEY-VCH Verlag
+
+\bibitem[{Wolf(1954)}]{Wolf1954}
+Wolf E., 1954, Nuovo Cimento, 12
+
+\bibitem[{Zernicke(1938)}]{VanCittertZernicke1938}
+Zernicke F., 1938, Physica, 5
+
+\end{thebibliography}

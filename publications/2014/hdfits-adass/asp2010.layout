@@ -1,0 +1,42 @@
+#% Do not delete the line below; configure depends on this
+#  \DeclareLaTeXClass{article}
+# Report textclass definition file. Taken from initial LyX source code
+# Author : Danny Price <danny.price@astro.ox.ac.uj>
+# Based on Keith A. Gillow's OCIAM Thesis class
+# which is online at http://www.maths.ox.ac.uk/help/faqs/latex/thesisclass
+
+Format 11
+Input stdclass.inc
+Input numreport.inc
+
+Style Affils
+        LatexType             Command
+        LatexName             affil
+        LabelSep              x
+        Align                 Center
+        LabelType             Static
+        LabelFont
+          Series              Bold
+          Color               Blue
+        EndFont
+        LabelString "Affils:" 
+InTitle 1
+End
+
+
+Style Abstract
+   InTitle 1
+End
+
+Style Title
+   InTitle 1
+End
+
+Style Bibliography
+	TopSep                4
+	LabelString           "Bibliography"
+	LabelFont
+	  Series              Bold
+	  Size                Huge
+	EndFont
+End

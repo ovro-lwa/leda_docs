@@ -1,0 +1,240 @@
+\begin{thebibliography}{35}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Przywara and Weeren(2007)]{Przywara:vw}
+B~Przywara and S~Weeren.
+\newblock {Energy efficient servers in Europe}.
+\newblock Technical report, The Efficient Servers Consortium, 2007.
+
+\bibitem[Meijer(2010)]{2010Sci...328..318M}
+G~I Meijer.
+\newblock {Cooling Energy-Hungry Data Centers}.
+\newblock \emph{Science}, 328:\penalty0 318--319, April 2010.
+
+\bibitem[Ellingson et~al.(2013)Ellingson, Taylor, Craig, Hartman, Dowell,
+  Wolfe, Clarke, Hicks, Kassim, Ray, Rickard, Schinzel, and
+  Weiler]{Ellingson:2013ko}
+S~W Ellingson, G~B Taylor, J~Craig, J~Hartman, J~Dowell, C~N Wolfe, T~E Clarke,
+  B~C Hicks, N~E Kassim, P~S Ray, L~J Rickard, F~K Schinzel, and K~W Weiler.
+\newblock {The LWA1 Radio Telescope}.
+\newblock \emph{Antennas and Propagation, IEEE Transactions on}, 61\penalty0
+  (5):\penalty0 2540--2549, 2013.
+
+\bibitem[Broekema et~al.(2012)Broekema, van Nieuwpoort, and
+  Bal]{Broekema:2012hw}
+P~Chris Broekema, Rob~V van Nieuwpoort, and Henri~E Bal.
+\newblock {ExaScale high performance computing in the square kilometer array}.
+\newblock In \emph{workshop on High-Performance Computing for Astronomy Data},
+  page~9, New York, New York, USA, 2012. ACM Press.
+
+\bibitem[Perley et~al.(2009)Perley, Napier, Jackson, Butler, Carlson, Fort,
+  Dewdney, Clark, Hayward, Durand, Revnell, and McKinnon]{Perley:2009fp}
+R~Perley, P~Napier, J~Jackson, B~Butler, B~Carlson, D~Fort, P~Dewdney, B~Clark,
+  R~Hayward, S~Durand, M~Revnell, and M~McKinnon.
+\newblock {The Expanded Very Large Array}.
+\newblock \emph{Proceedings of the IEEE}, 97\penalty0 (8):\penalty0 1448--1462,
+  2009.
+
+\bibitem[Wootten and Thompson(2009)]{Wootten:2009hw}
+A~Wootten and A~Thompson.
+\newblock {The Atacama Large Millimeter/Submillimeter Array}.
+\newblock \emph{Proceedings of the IEEE}, 97\penalty0 (8):\penalty0 1463--1471,
+  2009.
+
+\bibitem[Kocz et~al.(2014)Kocz, Greenhill, Barsdell, Bernardi, Jameson, Clark,
+  Craig, Price, Taylor, Schinzel, and Werthimer]{Kocz:2014jr}
+J~Kocz, L~J Greenhill, B~R Barsdell, G~Bernardi, A~Jameson, M~A Clark, J~Craig,
+  D~Price, G~B Taylor, F~K Schinzel, and D~Werthimer.
+\newblock {A Scalable Hybrid FPGA/GPU FX Correlator}.
+\newblock \emph{Journal of Astronomical Instrumentation}, 03\penalty0
+  (01):\penalty0 1450002, March 2014.
+
+\bibitem[Barsdell et~al.(2010)Barsdell, Barnes, and Fluke]{2010MNRAS.408.1936B}
+B~R Barsdell, D~G Barnes, and C~J Fluke.
+\newblock {Analysing astronomy algorithms for graphics processing units and
+  beyond}.
+\newblock \emph{Monthly Notices of the Royal Astronomical Society},
+  408\penalty0 (3):\penalty0 1936--1944, November 2010.
+
+\bibitem[Clark et~al.(2013)Clark, Plante, and Greenhill]{Clark:2013fr}
+M~A Clark, P~L Plante, and L~J Greenhill.
+\newblock {Accelerating radio astronomy cross-correlation with graphics
+  processing units}.
+\newblock \emph{International Journal of High Performance Computing
+  Applications}, 27\penalty0 (2):\penalty0 178--192, May 2013.
+
+\bibitem[Magro et~al.(2014)Magro, Adami, and Ord]{Magro:2014ul}
+Alessio Magro, Kristian~Zarb Adami, and Steve Ord.
+\newblock {Suitability of NVIDIA GPUs for SKA1-Low}.
+\newblock \emph{arXiv.org}, 1407.4698v3, 2014.
+
+\bibitem[Fallah and Pedram(2005)]{FALLAH:2005vt}
+Farzan Fallah and Massoud Pedram.
+\newblock {Standby and Active Leakage Current Control and Minimization in CMOS
+  VLSI Circuits}.
+\newblock \emph{IEICE Transactions on Electronics}, E88-C\penalty0
+  (4):\penalty0 509--519, April 2005.
+
+\bibitem[Liao et~al.(2005)Liao, He, and Lepak]{Liao:2005ft}
+Weiping Liao, Lei He, and K~M Lepak.
+\newblock {Temperature and supply Voltage aware performance and power modeling
+  at microarchitecture level}.
+\newblock \emph{Computer-Aided Design of Integrated Circuits and Systems, IEEE
+  Transactions on}, 24\penalty0 (7):\penalty0 1042--1053, 2005.
+
+\bibitem[Rittman(2005)]{Rittman:2005wy}
+D~Rittman.
+\newblock {Nanometer Power Leakage}.
+\newblock Technical report, Tayden Design, 2005.
+
+\bibitem[Brooks et~al.(2007)Brooks, Dick, Joseph, and Shang]{Brooks:2007iz}
+D~Brooks, R~P Dick, R~Joseph, and Li~Shang.
+\newblock {Power, Thermal, and Reliability Modeling in Nanometer-Scale
+  Microprocessors}.
+\newblock \emph{Micro, IEEE}, 27\penalty0 (3):\penalty0 49--62, 2007.
+
+\bibitem[Liu et~al.(2007)Liu, Dick, Shang, and Yang]{Liu:2007ga}
+Yongpan Liu, R~P Dick, Li~Shang, and Huazhong Yang.
+\newblock {Accurate Temperature-Dependent Integrated Circuit Leakage Power
+  Estimation is Easy}.
+\newblock In \emph{Design, Automation {\&} Test in Europe Conference {\&}
+  Exhibition, DATE '07}, pages 1--6, 2007.
+
+\bibitem[Dennard et~al.(1974)Dennard, Gaensslen, Rideout, Bassous, and
+  LeBlanc]{Dennard:1974cs}
+R~H Dennard, F~H Gaensslen, V~L Rideout, E~Bassous, and A~R LeBlanc.
+\newblock {Design of ion-implanted MOSFET's with very small physical
+  dimensions}.
+\newblock \emph{Solid-State Circuits, IEEE Journal of}, 9\penalty0
+  (5):\penalty0 256--268, 1974.
+
+\bibitem[Mei et~al.(2013)Mei, Yung, Zhao, and Chu]{Mei:2013dk}
+Xinxin Mei, Ling~Sing Yung, Kaiyong Zhao, and Xiaowen Chu.
+\newblock {A measurement study of GPU DVFS on energy conservation}.
+\newblock In \emph{Workshop on Power-Aware Computing and Systems}, pages 1--5,
+  New York, USA, 2013. ACM Press.
+
+\bibitem[Rofouei et~al.(2008)Rofouei, Stathopoulos, and Ryffel]{Rofouei:2008tk}
+M~Rofouei, T~Stathopoulos, and S~Ryffel.
+\newblock {Energy-aware high performance computing with graphic processing
+  units}.
+\newblock In \emph{Conference on Power aware computing and systems}, 2008.
+
+\bibitem[Collange et~al.(2009)Collange, Defour, and Tisserand]{Collange:2009ci}
+Sylvain Collange, David Defour, and Arnaud Tisserand.
+\newblock {Power Consumption of GPUs from a Software Perspective}.
+\newblock In \emph{Computational Science--ICCS}, pages 914--923. Springer
+  Berlin Heidelberg, Berlin, Heidelberg, 2009.
+
+\bibitem[Suda and Ren(2009)]{Suda:2009hi}
+R~Suda and Da~Qi Ren.
+\newblock {Accurate Measurements and Precise Modeling of Power Dissipation of
+  CUDA Kernels toward Power Optimized High Performance CPU-GPU Computing}.
+\newblock In \emph{Parallel and Distributed Computing, Applications and
+  Technologies, International Conference on}, pages 432--438, 2009.
+
+\bibitem[Huang et~al.(2009)Huang, Xiao, and Feng]{Huang:2009es}
+S~Huang, S~Xiao, and W~Feng.
+\newblock {On the energy efficiency of graphics processing units for scientific
+  computing}.
+\newblock \emph{Parallel {\&} Distributed Processing (IPDPS), IEEE
+  International Symposium on}, pages 1--8, 2009.
+
+\bibitem[Ren and Suda(2010)]{DaQiRen:2010kc}
+Da~Qi Ren and Reiji Suda.
+\newblock {Investigation on the power efficiency of multi-core and GPU
+  Processing Element in large scale SIMD computation with CUDA}.
+\newblock In \emph{International Conference on Green Computing (Green Comp)},
+  pages 309--316. IEEE, 2010.
+
+\bibitem[Hong et~al.(2010)Hong, Kim, Hong, and Kim]{Hong:2010ie}
+Sunpyo Hong, Hyesoon Kim, Sunpyo Hong, and Hyesoon Kim.
+\newblock \emph{{An integrated GPU power and performance model}}, volume~38.
+\newblock ACM, New York, USA, June 2010.
+
+\bibitem[Jiao et~al.(2010)Jiao, Lin, Balaji, and Feng]{Jiao:2010cb}
+Y~Jiao, H~Lin, P~Balaji, and W~Feng.
+\newblock {Power and Performance Characterization of Computational Kernels on
+  the GPU}.
+\newblock In \emph{Green Computing and Communications (GreenCom), IEEE/ACM
+  Int'l Conference on {\&} Int'l Conference on Cyber, Physical and Social
+  Computing (CPSCom)}, pages 221--228, 2010.
+
+\bibitem[Nagasaka et~al.(2010)Nagasaka, Maruyama, Nukada, Endo, and
+  Matsuoka]{Nagasaka:2010cq}
+Hitoshi Nagasaka, Naoya Maruyama, Akira Nukada, Toshio Endo, and Satoshi
+  Matsuoka.
+\newblock {Statistical power modeling of GPU kernels using performance
+  counters}.
+\newblock In \emph{International Conference on Green Computing (Green Comp)},
+  pages 115--122. IEEE, 2010.
+
+\bibitem[Kasichayanula et~al.(2012)Kasichayanula, Terpstra, Luszczek, Tomov,
+  Moore, and Peterson]{Kasichayanula:2012fp}
+K~Kasichayanula, D~Terpstra, P~Luszczek, S~Tomov, S~Moore, and G~D Peterson.
+\newblock {Power Aware Computing on GPUs}.
+\newblock \emph{Application Accelerators in High Performance Computing
+  (SAAHPC), Symposium on}, pages 64--73, 2012.
+
+\bibitem[Chen et~al.(2011)Chen, Li, Zhang, Peng, and Peir]{Chen:2011hz}
+Jianmin Chen, Bin Li, Ying Zhang, Lu~Peng, and Jih-Kwon Peir.
+\newblock {Statistical GPU power analysis using tree-based methods}.
+\newblock In \emph{International Green Computing Conference and Workshops
+  (IGCC)}, pages 1--6, 2011.
+
+\bibitem[Ge et~al.(2013)Ge, Vogt, Majumder, Alam, Burtscher, and
+  Zong]{Ge:2013ed}
+Rong Ge, R~Vogt, J~Majumder, A~Alam, M~Burtscher, and Ziliang Zong.
+\newblock {Effects of Dynamic Voltage and Frequency Scaling on a K20 GPU}.
+\newblock In \emph{Parallel Processing (ICPP), 42nd International Conference
+  on}, pages 826--833, 2013.
+
+\bibitem[Williams et~al.(2009)Williams, Waterman, and
+  Patterson]{Williams:2009cx}
+Samuel Williams, Andrew Waterman, and David Patterson.
+\newblock {Roofline: an insightful visual performance model for multicore
+  architectures}.
+\newblock \emph{Communications of the ACM}, 52\penalty0 (4):\penalty0 65--76,
+  April 2009.
+
+\bibitem[Nugteren et~al.(2014)Nugteren, van~den Braak, and
+  Corporaal]{Nugteren:2014bo}
+Cedric Nugteren, Gert-Jan van~den Braak, and Henk Corporaal.
+\newblock {Roofline-aware DVFS for GPUs}.
+\newblock In \emph{International Workshop}, pages 8--10, New York, New York,
+  USA, 2014. ACM Press.
+
+\bibitem[Liao and He(2005)]{Liao:2005ek}
+Weiping Liao and Lei He.
+\newblock {Coupled Power and Thermal Simulation with Active Cooling}.
+\newblock In \emph{Power-Aware Computer Systems}, pages 148--163. Springer
+  Berlin Heidelberg, Berlin, Heidelberg, 2005.
+
+\bibitem[Januszewskia et~al.(2013)Januszewskia, Gillyb, Yilmazc, and
+  Auweterd]{Januszewskia:vu}
+R~Januszewskia, L~Gillyb, E~Yilmazc, and A~Auweterd.
+\newblock {Cooling--making efficient choices}.
+\newblock Technical report, Partnership for Advanced Computing in Europe, 2013.
+
+\bibitem[Zimmermann et~al.(2012)Zimmermann, Meijer, Tiwari, Paredes, Michel,
+  and Poulikakos]{Zimmermann:2012fv}
+Severin Zimmermann, Ingmar Meijer, Manish~K Tiwari, Stephan Paredes, Bruno
+  Michel, and Dimos Poulikakos.
+\newblock {Aquasar: A hot water cooled data center with direct energy reuse}.
+\newblock \emph{Energy}, 43\penalty0 (1):\penalty0 237--245, July 2012.
+
+\bibitem[n.d.()]{googlePUE}
+n.d.
+\newblock URL
+  \url{https://www.google.com/about/datacenters/efficiency/internal/#temperature}.
+
+\bibitem[Azevedo et~al.(2012)Azevedo, French, and Power]{Azevedo:2012tv}
+D~Azevedo, D~A French, and E~N Power.
+\newblock {PUE{\texttrademark}: A Comprehensive Examination of the Metric}.
+\newblock Technical report, The Green Grid, 2012.
+
+\end{thebibliography}

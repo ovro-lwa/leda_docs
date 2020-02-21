@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: greengpu.aux
+The style file: unsrtnat.bst
+Database file #1: greengpu.bib
+Warning--string name "august" is undefined
+--line 303 of file greengpu.bib
+Warning--entry type for "googlePUE" isn't style-file defined
+--line 489 of file greengpu.bib
+Warning--empty year in googlePUE
+You've used 35 entries,
+            2481 wiz_defined-function locations,
+            780 strings with 11431 characters,
+and the built_in function-call counts, 15785 in all, are:
+= -- 1301
+> -- 945
+< -- 24
++ -- 352
+- -- 282
+* -- 1278
+:= -- 2493
+add.period$ -- 111
+call.type$ -- 35
+change.case$ -- 72
+chr.to.int$ -- 35
+cite$ -- 36
+duplicate$ -- 778
+empty$ -- 1359
+format.name$ -- 329
+if$ -- 3385
+int.to.chr$ -- 1
+int.to.str$ -- 36
+missing$ -- 31
+newline$ -- 182
+num.names$ -- 105
+pop$ -- 312
+preamble$ -- 1
+purify$ -- 35
+quote$ -- 0
+skip$ -- 481
+stack$ -- 0
+substring$ -- 742
+swap$ -- 181
+text.length$ -- 15
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 242
+warning$ -- 1
+while$ -- 135
+width$ -- 0
+write$ -- 470
+(There were 3 warnings)

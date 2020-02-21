@@ -1,0 +1,620 @@
+#LyX file created by tex2lyx 2.1
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+% This is the aspauthor.tex LaTeX file
+% Copyright 2010, Astronomical Society of the Pacific Conference Series
+
+\usepackage{asp2010}
+
+
+\resetcounters
+
+%\bibliographystyle{asp2010}
+
+\markboth{Author1, Author2, and Author3}{Author's Final Checklist}
+
+
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+ASP Author Template
+\end_layout
+
+\begin_layout Author
+Sample
+\begin_inset space ~
+
+\end_inset
+
+Author1
+\begin_inset Formula $^1$
+\end_inset
+
+, Sample
+\begin_inset space ~
+
+\end_inset
+
+Author2
+\begin_inset Formula $^2$
+\end_inset
+
+, and Sample
+\begin_inset space ~
+
+\end_inset
+
+Author3
+\begin_inset Formula $^3$
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+affil
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $^1$
+\end_inset
+
+Institution Full Address for Author1
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+affil
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $^2$
+\end_inset
+
+Institution Full Address for Author2
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+affil
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $^3$
+\end_inset
+
+Institution Full Address for Author3
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+This is the Astronomical Society of the Pacific (ASP) 2010 author template file. This sample author template includes the ASP author checklist. 
+\end_layout
+
+\begin_layout Section
+The Template
+\end_layout
+
+\begin_layout Standard
+To fill in this template, make sure that you read and follow the ASPCS Instructions for Authors and Editors available for download online. Hints and tips for including graphics, tables, citations, and other formatting helps are available there.
+\end_layout
+
+\begin_layout Subsection
+The Author Checklist
+\end_layout
+
+\begin_layout Standard
+The following checklist should be followed when writing a submission to a conference proceedings to be published by the ASP.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+checklistitemize
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Article is within page limitations set by editor. 
+\end_layout
+
+\begin_layout Itemize
+Paper compiles properly without errors or warnings. 
+\end_layout
+
+\begin_layout Itemize
+No fundamental modifications to the basic template are present, including special definitions, special macros, packages, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+verb"
+\backslash
+vspace"
+\end_layout
+
+\end_inset
+
+ commands, font adjustments, etc. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%(§ 3.3, p. 10)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Commented-out text has been removed. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%(§ 3.3, p. 10,11)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Author and shortened title running heads are proper for the paper and shortened so page number is within the margin. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%(§ 3.1, p. 4)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Paper checked for general questions of format and style, including, but not limited to, the following: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+capitalization, layout, and length of running heads, titles and 
+\begin_inset Newline newline
+\end_inset
+
+sections/subsections; 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§ 3.1, p. 4) (§ 3.2, p. 5) (§ 3.3, p. 8)
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+page numbers within margin; 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§ 3.1, p. 4)
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+author names spelled correctly and full postal addresses given; 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§ 3.2, p. 5-6)
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+abstracts; 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§ 3.2, p. 7);
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+all margins---left, right, top and bottom; 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§3.1, p. 4; §3.2, p. 5; §3.3, p. 9; §3.6, p. 21);
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+standard font size and no Type 3 fonts; 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%(§ 3.3, pp. 10-11; § 3.6, p. 23; § 4.2, p. 25);
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+spacing; 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§ 3.3, pp. 9-10);
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+section headings. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§ 3.3; p. 8).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+All tables are correctly positioned within margins, are properly formatted, and are referred to in the text. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%(§ 3.5, pp. 16-20)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+All figures are correctly positioned within margins, are minimum 300 dpi resolution, not too dark or too light, do not contain embedded fonts, and are referred to in the text. All labeling or text will be legible with 10% reduction. Questionable images printed, checked and replaced if necessary. Figures do not cover text or running heads, and proper permissions have been granted and acknowledged. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%(§ 3.6, pp. 21-24)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+All acknowledgments and discussions are in proper format. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (pp. 11-12, p. 20)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If there are acknowledgments at the end of the article, ensure that the author has used the 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+verb"
+\backslash
+acknowledgments"
+\end_layout
+
+\end_inset
+
+ command and not the commands 
+\begin_inset Newline newline
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+verb"
+\backslash
+begin{Acknowledgments}"
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+verb"
+\backslash
+end{Acknowledgments}"
+\end_layout
+
+\end_inset
+
+. Acknowledgments should only be used for thanking institutions, groups, and individuals who have directly contributed to the work. 
+\end_layout
+
+\begin_layout Itemize
+All references quoted in the text are listed in the bibliography; all items in the bibliography have been referred to in the text. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§ 4, pp. 24-28)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+All bibliography entries are in the proper format, using one of the referencing styles given. Each of the references is bibliographically complete, including full names of authors, editors, publishers, place of publication, page numbers, years, etc. 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% (§§ 4.2-4.3, pp. 25-28)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A complete BibTeX
+\begin_inset space \space{}
+
+\end_inset
+
+file is ready to submit to the editor. 
+\end_layout
+
+\begin_layout Itemize
+References to preprints replaced with publication information when possible. 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+acknowledgements
+\end_layout
+
+\end_inset
+
+ The ASP would like to the thank the dedicated researchers that are publishing with the ASP.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%
+\backslash
+bibliography{aspauthor}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

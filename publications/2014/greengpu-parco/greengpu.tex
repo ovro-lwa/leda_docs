@@ -1,0 +1,975 @@
+%% LyX 2.1.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[twoside,english,sort&compress]{elsarticle}
+\pdfoutput=1
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\pagestyle{headings}
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage[unicode=true]
+ {hyperref}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% specify here the journal
+\journal{Parallel Computing}
+
+% use this if you need line numbers
+%\usepackage{lineno}
+\usepackage{subfig}
+
+\@ifundefined{showcaptionsetup}{}{%
+ \PassOptionsToPackage{caption=false}{subfig}}
+\usepackage{subfig}
+\makeatother
+
+\begin{document}
+
+\begin{frontmatter}{}
+
+
+\title{Optimizing performance per watt on GPUs in High Performance Computing:
+temperature, frequency and voltage effects }
+
+
+\author[cfa]{D. C.~Price\corref{cor1}}
+
+
+\ead{dprice@cfa.harvard.edu}
+
+
+\author[cfa,nvidia,caltech]{M. A.~Clark}
+
+
+\ead{mclark@nvidia.com}
+
+
+\author[cfa]{B. R.~Barsdell}
+
+
+\author[nvidia]{R.~Babich}
+
+
+\author[cfa]{L. J.~Greenhill}
+
+
+\ead{greenhill@cfa.harvard.edu}
+
+
+
+\cortext[cor1]{Corresponding author}
+
+
+\address[cfa]{Harvard-Smithsonian Center for Astrophysics, MS 42, 60 Garden Street,
+Cambridge MA 01238 USA}
+
+
+\address[nvidia]{NVIDIA, 2701 San Tomas Expy, Santa Clara, CA 95050 USA}
+
+
+\address[caltech]{Caltech MC 249-17 1200 East California Blvd, Pasadena CA 91125}
+\begin{abstract}
+The magnitude of the real-time digital signal processing challenge
+attached to large radio astronomical antenna arrays motivates use
+of high performance computing (HPC) systems. The need for high power
+efficiency (performance per watt) at remote observatory sites parallels
+that in HPC broadly, where efficiency is an emerging critical metric.
+We investigate how the performance per watt of graphics processing
+units (GPUs) is affected by temperature, core clock frequency and
+voltage. Our results highlight how the underlying physical processes
+that govern transistor operation affect power efficiency. In particular,
+we show experimentally that GPU power consumption grows non-linearly
+with both temperature and supply voltage, as predicted by physical
+transistor models. We show lowering GPU supply voltage and increasing
+clock frequency while maintaining a low die temperature increases
+the power efficiency of an NVIDIA K20 GPU by up to 37-48\% over default
+settings when running xGPU, a compute-bound code used in radio astronomy.
+We discuss how temperature-aware power models could be used to reduce
+power consumption for future HPC installations. Automatic temperature-aware
+and application-dependent voltage and frequency scaling (T-DVFS and
+A-DVFS) may provide a mechanism to achieve better power efficiency
+for a wider range of codes running on GPUs.\end{abstract}
+\begin{keyword}
+performance per watt \sep power efficiency \sep radio astronomy
+\sep HPC\sep GPU \sep DVFS
+\end{keyword}
+
+\end{frontmatter}{}
+
+
+
+
+\section{Introduction}
+
+Power efficiency --- computational performance per unit of power used
+--- is a crucial design factor within HPC. Power consumption is often
+a limiting factor for HPC systems, with current generation petaflop
+machines already requiring power budgets >1~MW to operate. For example,
+the Piz Daint system at the Swiss National Supercomputing Centre consumes
+1.76~MW of power, despite being the greenest petaflop machine on
+the Green500 list%
+\footnote{\href{http://www.green500.org/lists/green201406}{http://www.green500.org/lists/green201406}%
+} (\#5 overall, 7.7 PFLOPS theoretical maximum). 
+
+In order to build Exascale systems (>$10^{18}$ FLOPS), increasing
+the achieved performance per watt of high performance computing (HPC)
+hardware is of paramount importance for several reasons. Firstly and
+foremostly, the more power consumed, the more the system costs to
+operate. Secondly, generation and distribution of power is non-trivial
+on megawatt scales; for example, if we extrapolate power draw from
+Piz Daint, an Exascale machine would require $\sim$230~MW, thus
+requiring its own power plant. In addition, the waste heat of massive
+HPC systems poses an engineering challenge: this heat must be removed
+to avoid compute nodes overheating and failing. The cooling systems
+of large HPC installations often require significant amounts of power
+themselves. 
+
+As much as 50\% of the total power consumption of HPC systems is consumed
+by infrastructure like cooling, power conditioning and lighting \citep{Przywara:vw,2010Sci...328..318M}.
+Decreasing compute power consumption in turn decreases infrastructure
+power consumption and as such is the most promising way to increase
+overall power efficiency.
+
+Machines based upon graphic processing units (GPUs) dominate the Green\-500
+list (June 2014), with all of the top 15 machines featuring NVIDIA
+Kepler GPUs. Indeed, two of the top 10 most powerful computers on
+the June 2014 Top500 list%
+\footnote{\href{http://www.top500.org/lists/2014/06/}{http://www.top500.org/lists/2014/06/}%
+}, Titan (\#2) and Piz Daint (\#6), are based on Kepler GPUs. As such,
+the question of how best to increase GPU power efficiency is pressing. 
+
+In this paper, we investigate how performance per watt can be optimized
+for an NVIDIA K20 GPU. We approach the problem by considering the
+physical processes that govern transistor performance; in particular,
+how temperature, supply voltage, and clock frequency affect power
+efficiency. 
+
+
+\subsection{Power efficiency and GPUs in radio astronomy }
+
+The proposed all-sky imaging element of the Long Wavelength Array
+(LWA) \citep{Ellingson:2013ko}, with $\sim0.1$km$^{2}$ collecting
+area and the proposed Square Kilometre Array (SKA) telescope%
+\footnote{\href{http://www.skatelescope.org}{http://www.skatelescope.org}%
+} will demand computation at peta- and exa-scale processing respectively
+(e.g. \citep{Broekema:2012hw}). Both instruments would produce large
+enough volumes of data that a substantial fraction of processing must
+be performed in real-time and in close proximity to the telescope(s).
+Power efficiency is of particular concern within radio astronomy as
+most telescopes are in remote locations and must operate under stricter
+power limits. As such, custom hardware is often built to perform the
+required digital signal processing tasks. For example the EVLA WIDAR
+and ALMA correlators \citep{Perley:2009fp,Wootten:2009hw} are very
+capable and power efficient signal processing systems, but they lack
+the flexibility afforded by architectures where processing is performed
+on general purpose computing platforms; they also took over a decade
+to design and implement. It has been shown that GPU-based signal processing
+systems for radio astronomy can be designed and deployed in a fraction
+of this time, see for example \citep{Kocz:2014jr}.
+
+GPUs are well-suited to many of the signal processing tasks required
+in radio astronomy, such as correlation, time-series dedispersion
+and radio synthesis image processing \citep{2010MNRAS.408.1936B,Clark:2013fr}.
+If power efficiency challenges can be met, then a GPU-based HPC system
+would be an attractive solution for SKA signal processing. In Magro
+et. al. \citep{Magro:2014ul}, a GPU-based implementation of the SKA1-Low
+central signal processor (a subsystem of the full SKA) is calculated
+to require $\sim$335 kW, based on current NVIDIA Kepler GPU architecture.
+This assumes a GPU power efficiency of 12 GFLOPS/W; based on the results
+presented in Section \ref{sec:Results} below, this is conservative:
+we report 18.3 GFLOPS/W for the \texttt{xGPU} cross-correlation code,
+after temperature-aware tuning of GPU supply voltage and frequency.
+Whether or not GPUs are considered for SKA1-Low signal processing
+hardware will depend upon demonstrating that GPUs can achieve acceptable
+power efficiency within the next few years.
+
+\subsection{Power leakage }
+
+Understanding the factors that affect power efficiency is vital for
+optimizing systems to minimize power consumption. While the architecture
+of digital computational devices differ, the physical processes that
+underlie power usage are common across all architectures. These processes
+can be broadly broken into two categories: static and dynamic. That
+is, total power usage $P_{\mathrm{sys}}$ is given by
+\begin{equation}
+P_{\mathrm{sys}}=P_{\mathrm{static}}+P_{\mathrm{dynamic}}.\label{eq:pow-tot}
+\end{equation}
+The dynamic power is the power consumed in switching logic states,
+and for a single logic component is given by 
+\[
+P_{\mathrm{dynamic}}=CV_{\mathrm{dd}}^{2}f_{\mathrm{clock}},
+\]
+ where $C$ is the load capacitance, $V_{\mathrm{dd}}$ is the voltage
+swing and $f_{\mathrm{clock}}$ is the switching frequency. For a
+chip with many logic components, the dynamic power is the sum of the
+contributions of all $N_{\mathrm{c}}$ components:
+\begin{equation}
+P_{\mathrm{dynamic}}=\sum_{\mathrm{n}=1}^{N_{\mathrm{c}}}C_{\mathrm{n}}V_{\mathrm{n}}^{2}f_{\mathrm{n}},\label{eq:pow-dyn}
+\end{equation}
+ which for devices with a single clock domain (i.e. switching frequency),
+voltage swing $V_{\mathrm{dd}}$, and identical logic components simplifies
+to $N_{\mathrm{c}}CV_{\mathrm{dd}}^{2}f_{\mathrm{clock}}$. 
+
+Static power, also known as \emph{leakage power}, is consumed regardless
+of transistor switching and is due to current leakage. Briefly, there
+are four main sources of leakage current%
+\footnote{Conversion to power is given simply by $P=VI$.%
+} in a CMOS transistor \citep{FALLAH:2005vt}
+\begin{enumerate}
+\item \textbf{Reverse-biased junction leakage current }($I_{\mathrm{rev}}$):
+leakage from source or drain to the substrate through reverse-biased
+diodes when a transistor is off.
+\item \textbf{Gate-induced drain leakage} ($I_{\mathrm{GIDL}}$): high field
+effect at drain junctions of MOS transistors results in electrons
+being collected by the drain and holes being swept out to the substrate,
+resulting in GIDL current. 
+\item \textbf{Gate direct-tunneling leakage} ($I_{\mathrm{GDTL}}$): quantum
+tunneling of electrons through oxide insulation to the substrate.
+\item \textbf{Subthreshold leakage} ($I_{\mathrm{sub}}$): current resulting
+from conduction between source and drain through a transistor channel
+when gate-to-source voltage ($V_{\mathrm{GS}}$) is below the threshold
+voltage ($V_{\mathrm{thr}}$). The amount of leakage is strongly temperature-dependent.
+\end{enumerate}
+More detailed discussion of these mechanisms can be found in \citep{FALLAH:2005vt,Liao:2005ft,Rittman:2005wy,Brooks:2007iz,Liu:2007ga}. 
+
+For sub-micrometer processes (i.e. most current-generation compute
+architectures), subthreshold leakage is the dominant mechanism, and
+is the reason why Dennard scaling has broken down. Dennard scaling
+\citep{Dennard:1974cs} states that as transistors get smaller their
+power density stays constant and power use remains proportional to
+area. However, as transistor size decreases, subthreshold leakage
+increases, which increases power leakage and chip heating. The breaking
+of Dennard scaling has led to chip manufacturers focussing on multi-core
+processors instead of frequency scaling to increase performance.
+
+It is informative to consider an analytical expression for subthreshold
+leakage. As shown in \citep{Liu:2007ga}, $I_{\mathrm{sub}}$ of a
+MOS device can be expressed as
+\begin{equation}
+I_{\mathrm{sub}}=A_{\mathrm{s}}\frac{W}{L}\left(\frac{kT}{q}\right)^{2}e^{\frac{q(V_{\mathrm{GS}}-V_{\mathrm{thr}})}{nkT},}\label{eq:sub-thr}
+\end{equation}
+where $A_{{\rm s}}$ is a technology-dependent constant, $W$ and
+$L$ are device's effective channel width and length, and $n$ is
+the transistor's subthreshold swing coefficient. The quantity $kT/q$
+is the thermal voltage, where $k$ is Boltzmann's constant, $q$ is
+the charge of an electron, and $T$ is temperature. The threshold
+voltage $V_{{\rm thr}}$ is also a (non-linear) function of temperature,
+decreasing with increasing temperature. 
+
+Equation~\ref{eq:sub-thr} predicts that subthreshold leakage current
+exhibits a non-linear temperature dependence, proportional to $I_{{\rm sub}}\propto T^{2}e^{-b/T}$,
+where $b$ is a positive constant. Here, the exponent is necessarily
+negative, as $(V_{{\rm GS}}-V_{\mathrm{thr}})<0$ (by definition of
+subthreshold), $q/k\approx11605$ K/V, and subthreshold swing $n\ge1$;
+it follows that Equation~\ref{eq:sub-thr} monotonically increases
+with temperature. This implies that power efficiency of a transistor
+increases with decreasing temperature, due to suppression of subthreshold
+leakage. One therefore expects to see performance per watt of GPUs
+improve as die temperature is lowered.
+
+
+\subsection{Maximizing power efficiency\label{sub:Maximizing-power-efficiency}}
+
+Maximizing power efficiency $\eta_{\mathrm{pow}}$, requires simultaneous
+optimization of power consumption and computational performance. Equations~\ref{eq:pow-tot},
+\ref{eq:pow-dyn} and \ref{eq:sub-thr}, suggest that to minimize
+power usage we should push voltages, clock frequencies, and temperatures
+as low as possible. In tension with this, compute performance, operations
+per second ($N_{\mathrm{OPS}}$), increases linearly with clock frequency.
+That is, maximum power efficiency is given by 
+\begin{equation}
+\eta_{\mathrm{pow}}=\frac{N_{\mathrm{OPS}}}{P_{\mathrm{total}}}=\frac{N_{\mathrm{OPS}}}{P_{\mathrm{dynamic}}+P_{\mathrm{static}}}.
+\end{equation}
+For a simple chip with full utilization of $N_{\mathrm{c}}$ identical
+compute components, each performing one operation per clock cycle,
+with a clock frequency $f_{\mathrm{clock}}$, 
+\begin{equation}
+N_{\mathrm{OPS}}=N_{\mathrm{c}}f_{\mathrm{clock}},
+\end{equation}
+and we have
+\begin{equation}
+\eta_{\mathrm{pow}}=\frac{N_{\mathrm{c}}f_{\mathrm{clock}}}{N_{\mathrm{c}}CV_{\mathrm{dd}}^{2}f_{\mathrm{clock}}+P_{\mathrm{static}}},.\label{eq:pow-eff}
+\end{equation}
+Equation~\ref{eq:pow-eff} shows that power efficiency is increased
+when voltage is decreased. Due to the $P_{\mathrm{static}}$ term
+in the denominator, efficiency also increases with clock frequency.
+
+For a complex chip such as a GPU this formalism is a simplification;
+there are also chip-specific tolerances and thermal dissipation limits
+that must be considered. Another consideration is that frequency and
+voltage are generally scaled together, not separately. This is primarily
+as the speed at which a digital circuit can switch states from low
+to high --- the gate delay time $t_{\mathrm{delay}}$ --- is 
+\begin{equation}
+t_{\mathrm{delay}}\propto\frac{V_{\mathrm{dd}}T^{\mu}}{(V_{\mathrm{dd}}-V_{\mathrm{thr}})^{\xi}},\label{eq:tdel-switch}
+\end{equation}
+where $\xi$ and $\mu$ are technology-dependent constants \citep{Liao:2005ft}.
+For 65-nm process, Liao et. al. \citep{Liao:2005ft} find $\mu=1.19$
+and $\xi$=1.2. The temperature dependence of Equation~\ref{eq:tdel-switch}
+arises as temperature affects carrier mobility and threshold voltage.
+At higher frequencies, there is more dynamic power usage, so die temperature
+will in turn increase, forcing higher $V_{\mathrm{dd}}$ to maintain
+suitable $t_{\mathrm{delay}}$ (which in turn increases power usage
+and die temperature).
+
+Nonetheless, the default clock-voltage combination has been shown
+to be conservative on some GPUs (see \citep{Mei:2013dk}). This is
+particularly true on the NVIDIA Kepler architecture Tesla class cards:
+both the Tesla K20 and GeForce GTX 780 Ti have GK110 processing units,
+but the base clock for the K20 is 705~MHz, while the GTX 780 is 863~MHz.
+One reason for this is differences in TDP (thermal design power),
+and targeted market; power consumption is of concern for HPC but less
+so for the gaming market. 
+
+
+\subsection{GPU power measurement and modeling}
+
+The simplified power efficiency formula presented in Equation~\ref{eq:pow-eff}
+is not immediately applicable to GPUs, which feature hierarchical
+memory, different clock domains, multiple instructions, and dynamic
+control of voltage and clock frequency (DVFS). As such, there have
+been many analyses at higher abstraction levels that quantify the
+power characteristics of GPU hardware and provide models that predict
+power usage \citep{Mei:2013dk,Rofouei:2008tk,Collange:2009ci,Suda:2009hi,Huang:2009es,DaQiRen:2010kc,Hong:2010ie,Jiao:2010cb,Nagasaka:2010cq,Kasichayanula:2012fp,Chen:2011hz,Ge:2013ed}.
+While approaches and resulting power models differ, the general findings
+of this corpus can be summarized as follows.
+\begin{itemize}
+\item Power consumption is dependent not only on the type of GPU, but also
+upon the kernels running on the GPU.
+\item GPU performance is either memory-bound, or compute-bound; this is
+well described by the roofline model \citep{Williams:2009cx}. Different
+code optimizations are required for each case.
+\item Execution of compute instructions require less energy than memory
+access. For example, a multiply-add (MAD) instruction uses 7-15 times
+less energy than L1 memory access on an NIVDIA G80 \citep{Collange:2009ci}.
+\item Distant (e.g., off-chip) memory access consumes more power than local
+memory access. These costs can be minimized by exploiting the memory
+hierarchy.
+\end{itemize}
+Our work differs in that we consider temperature, voltage and frequency
+as independent variables over which to optimize performance per watt.
+That is, we consider power efficiency $\eta_{\mathrm{pow}}=\eta_{\mathrm{pow}}(V_{\mathrm{dd},}f_{\mathrm{clock},}T)$.
+While voltage and frequency have previously been explored in GPU DVFS
+studies \citep{Mei:2013dk,Ge:2013ed,Nugteren:2014bo}, we explore
+a larger parameter space. Apart from in Hong et. al. \citep{Hong:2010ie},
+temperature effects on GPU power efficiency have been ignored. This
+is detrimental to GPU power model accuracy and to achieving optimal
+power efficiency, as discussed in Liao et. al. \citep{Liao:2005ft,Liao:2005ek}.
+We show that the simplified linear model of Hong et. al. \citep{Hong:2010ie}
+is not sufficient for predicting power usage on current generation
+GPUs.
+
+We show experimentally that significant power efficiency gains (up
+to 48\%) can be made on current generation hardware by being aware
+of the physical processes underlying GPU power usage. The remainder
+of this paper is organized as follows. In Section~\ref{sec:Materials-and-Methods},
+we introduce the hardware and software used to find optimal power
+efficiency on an NVIDIA K20 GPU. Our results are then presented in
+Section~\ref{sec:Results}; this is followed by discussion (Section~\ref{sec:Discussion})
+and conclusions (Section~\ref{sec:Conclusions}).
+
+
+\section{Materials and Methods\label{sec:Materials-and-Methods}}
+
+\begin{table}
+\protect\caption{Comparison of Tesla-class NVIDIA Kepler GPUs that use the GK110 chipset.
+\label{tab:tesla-comparison}}
+{\small{}}%
+\begin{tabular}{lccc}
+ & \textbf{\small{}Tesla } & {\small{}Tesla } & {\small{}Tesla }\tabularnewline
+ & \textbf{\small{}K20} & {\small{}K20x} & {\small{}K40}\tabularnewline
+\hline 
+\hline 
+{\small{}Chipset} & {\small{}GK110} & {\small{}GK110} & {\small{}GK110B}\tabularnewline
+{\small{}CUDA cores} & {\small{}2496} & {\small{}2688} & {\small{}2880}\tabularnewline
+{\small{}Base processor clock} & {\small{}705 MHz} & {\small{}732 MHz} & {\small{}745 MHz}\tabularnewline
+{\small{}Memory size (GDDR5)} & {\small{}5 GiB} & {\small{}6 GiB} & {\small{}12 GiB}\tabularnewline
+{\small{}Memory bandwidth} & {\small{}208 GB/s} & {\small{}250 GB/s} & {\small{}288 GB/s}\tabularnewline
+{\small{}Thermal Design Power (TDP)} & {\small{}225 W} & {\small{}235 W} & {\small{}235 W}\tabularnewline
+\hline 
+\multicolumn{4}{l}{\emph{\footnotesize{}Source:}{\footnotesize{} http://www.nvidia.com/object/tesla-servers.html}}\tabularnewline
+\end{tabular}
+\end{table}
+
+
+
+\subsection{Hardware overview}
+
+The work presented here was conducted on ``GreenGPU'', a custom-built
+computer system. GreenGPU consists of a Gigabyte GA-Z68MX motherboard
+with an Intel i7-2600 CPU, 16~GiB of DDR3 RAM, and an NVIDIA Tesla
+K20 GPU. The default heatsink of the K20 was replaced with an
+EK-FCTK20 water block, and a Swiftech water cooling system (MCP655)
+was installed. The specifications of the K20 are shown in Table~\ref{tab:tesla-comparison},
+along with a comparison of other Kepler Tesla class cards that use
+the GK110 chipset on 28-nm process. The operating system used for
+testing was 64-bit Linux Ubuntu 12.04 LTS, with NVIDIA GPU driver
+version 319.37 installed. A Windows 7 partition was also installed
+in order to run Windows-only GPU firmware modification tools.
+
+
+\subsection{Clock and voltage management}
+
+To control the clock frequency and voltage of the K20 GPU, we used
+three tools: \texttt{\small{}nvidia-smi}%
+\footnote{\href{https://developer.nvidia.com/nvidia-system-management-interface}{https://developer.nvidia.com/nvidia-system-management-interface}%
+}, \texttt{\small{}GPU-Z}%
+\footnote{\href{http://www.techpowerup.com/gpuz/}{http://www.techpowerup.com/gpuz/}%
+} and\texttt{\small{} Kepler BIOS Tweaker}%
+\footnote{\href{http://www.softpedia.com/get/System/Benchmarks/Kepler-BIOS-Tweaker.shtml}{http://www.softpedia.com/get/System/Benchmarks/Kepler-BIOS-Tweaker.shtml}%
+}. The \texttt{\small{}nvidia-smi} utility, or NVIDIA System Management
+Interface, is a command line utility that uses the NVIDIA Management
+Library%
+\footnote{\href{https://developer.nvidia.com/nvidia-management-library-nvml}{https://developer.nvidia.com/nvidia-management-library-nvml}%
+} (NVML) for management and control of NVIDIA devices. The \texttt{\small{}nvidia-smi}
+tool allows for the GPU core frequency to be altered; the allowed
+values are dependent upon the GPU (Table~\ref{tab:nvidia-smi}).
+In addition to the Tesla-class Kepler GPUs, some GeForce-class cards
+also use the GK110 chipset; these cards generally have larger TDPs,
+higher clockrates, and less memory. For example, the GTX 780 Ti has
+a TDP of 250~W, a base clock of 875~MHz, and 3~GiB GDDR5. The \texttt{\small{}nvidia-smi}
+tool also allows for power draw and GPU die temperature to be read
+from GPU sensors, giving an accurate way to measure temperature and
+power, with differences between power and temperature reliable to
+within $\pm$1~W and $\pm$$1^{\circ}$C. The reported power is the
+full-board power consumption, which includes memory and voltage regulators. 
+
+For finer grain control over core voltage and frequency, and so that
+we could tune these as independent parameters, we used the \texttt{\small{}GPU-Z}
+tool v0.7.7 and \texttt{\small{}Kepler BIOS Tweaker }tool v1.27. \texttt{\small{}GPU-Z}
+is a utility that displays GPU specifications and operating parameters,
+and allows for GPU firmware to be downloaded from the GPU. The \texttt{\small{}Kepler
+BIOS Tweaker }tool allows for modification of the parameters within
+GPU firmware, such as voltage and clock frequency. While benchmarking
+was run on the Ubuntu partition of GreenGPU, these two programs were
+run on the Windows 7 partition. Note that flashing firmware using
+tools such as \texttt{\small{}Kepler BIOS Tweaker} will void warranty
+and can potentially cause damage to the GPU. 
+
+\begin{table}
+\protect\caption{Supported core and memory clock pairs for the K20 \label{tab:nvidia-smi}}
+
+
+\centering{}{\small{}}%
+\begin{tabular}{cccc}
+{\small{}GDDR5 Freq.} & {\small{}GPU Core Freq.} & \multicolumn{2}{c}{{\small{}GPU Core Voltage }}\tabularnewline
+{\small{} (MHz)} & {\small{} (MHz)} & {\small{}State ID} & {\small{}(mV)}\tabularnewline
+\hline 
+\hline 
+{\small{}2600} & {\small{}758} & {\small{}V5} & {\small{}987.5-1112.5}\tabularnewline
+ & {\small{}705} & {\small{}$\,$V4$^{*}$} & {\small{}950-1062.5}\tabularnewline
+ & {\small{}666} & {\small{}V3} & {\small{}925-1050}\tabularnewline
+ & {\small{}640} & {\small{}V2} & {\small{}912.5-1025}\tabularnewline
+ & {\small{}614} & {\small{}V1} & {\small{}900-1000 }\tabularnewline
+\hline 
+{\small{}324} & {\small{}324} & {\small{}V0} & {\small{}875 - 875}\tabularnewline
+\hline 
+\multicolumn{4}{l}{{\footnotesize{}$^{*}$Default value}}\tabularnewline
+\end{tabular}
+\end{table}
+
+
+
+\subsection{\texttt{xGPU} cross-correlation code}
+
+For benchmarking and power efficiency testing, we used the \texttt{\small{}xGPU}
+CUDA code\texttt{\small{}}%
+\footnote{\href{https://github.com/GPU-correlators/xGPU}{https://github.com/GPU-correlators/xGPU}%
+} \citep{Clark:2013fr}. \texttt{\small{}xGPU} computes the cross-correlation
+of time-series data of $N$ inputs and is used for interferometric
+synthesis imaging in radio astronomy, see for example \citep{Kocz:2014jr}.
+It is virtually identical to the BLAS routine CHERK --- Complex Hermitian
+Rank K update --- where the $T\times N$ matrix, corresponding to
+time series data ($T$ dimension) from $N$ antennas is multiplied
+by its complex conjugate, producing an $N\times N$ Hermitian matrix.
+The problem is compute-bound because the compute complexity scales
+as $N^{2}T$, whereas the memory traffic scales as $N(T+N)$, assuming
+perfect caching. The \texttt{\small{}xGPU} code differs from regular
+CHERK as it contains domain-specific tweaks: it is designed to process
+8-bit integer input, only stores the lower triangle of the correlation
+matrix, and uses smaller tiles to improve performance for small-$N$.
+\texttt{\small{}xGPU} also has an additional parameter corresponding
+to the number of frequency channels to process; the problem is trivially
+parallelizable over frequency channels, so this can be thought of
+as a batching parameter. 
+
+We use the \texttt{\small{}xGPU} application to do this investigation,
+partly because that is our domain of interest; however, we also note
+that given it is compute-bound, it is well suited to our investigation:
+\texttt{\small{}xGPU} uses a multi-level tiling algorithm to minimize
+memory accesses from all memory spaces, and thus achieves a high percentage
+of peak throughput on the CUDA architecture. Thus, when running this
+algorithm, most of the power is consumed by the floating point units,
+and this increases the validity of the simple model in Section 1.2.
+
+\texttt{\small{}xGPU} has two different modes that were of particular
+use for this work. The first mode is a benchmark, which computes various
+performance metrics achieved, such as FLOPS, for a given set of compile-time
+parameters. The output of the GPU code is also compared against CPU
+code for validation. The second mode is a power diagnostic loop, in
+which \texttt{\small{}xGPU} is fed dummy data and run in an infinite
+loop, so as to keep the GPU running continuously.
+
+We achieved compute-bound performance using the following compile-time
+parameters: \texttt{\small{}NINPUTS=8192 NSTATION=4096, NFREQUENCY=2,
+}~\\
+\texttt{\small{}NTIME=2000, NTIME\_PIPE=1000, SHARED\_ATOMIC\_SIZE=8}.
+
+
+\subsection{Performance profiling method}
+
+The main parameters used for testing power efficiency in this work
+were GPU die temperature, GPU core voltage and clock frequency. We
+used \texttt{\small{}Kepler BIOS Tweaker }and \texttt{\small{}nvidia-smi}
+to modify the GPU core voltage and clock frequency, then we used \texttt{\small{}xGPU}
+to benchmark performance. Attempts to vary the memory clock frequency
+resulted in the GPU being inoperable, so no memory clock adjustments
+were conducted. 
+
+Thermal control of the GPU die was achieved by running \texttt{\small{}xGPU}
+in a power loop, while controlling the flow of water through the water
+cooling system. In order to continuously monitor the temperature and
+power draw, we used a Python script to parse the output of \texttt{\small{}nvidia-smi
+}and to log timestamped power usage and temperature data to file every
+second. By running this script in tandem with \texttt{\small{}xGPU},
+we tested the performance of the K20 GPU over a variety of core frequency
+and voltage combinations.
+
+
+\section{Results\label{sec:Results}}
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=0.7\columnwidth]{xgpu-benchmark}
+\par\end{centering}
+
+\protect\caption{FLOPS achieved running \texttt{xGPU} codes on an NVIDIA K20, as a
+function of GPU core clock frequency. \label{fig:xgpu-flops}}
+\end{figure}
+
+
+
+\subsection{\texttt{xGPU }benchmarking}
+
+The single-precision computational performance in FLOPS for \texttt{\small{}xGPU}
+is shown in Figure~\ref{fig:xgpu-flops} for a variety of different
+clock frequencies between 614-1070~MHz. Note that temperature and
+voltage do not affect achieved FLOPS. The maximum performance of
+3094~GFLOPS was achieved at a clock speed of 1070~MHz.
+
+
+\subsection{Overclocking at constant temperature with default voltages}
+
+After profiling the computational performance of \texttt{\small{}xGPU},
+we compared power usage of the GPU at different ($f_{clock}$, $V_{dd}$)
+combinations. As shown in Table~\ref{tab:nvidia-smi}, the K20 has
+preset frequency-voltage combinations that can be selected with \texttt{\small{}nvidia-sm}i.
+We applied frequency offsets of 0-300 MHz to these default values,
+in 60~MHz increments, and then measured the resulting power usage
+for the \texttt{\small{}xGPU }code (Figure~\ref{fig:pow-vs-freq}),
+and the corresponding power efficiency (Figure~\ref{fig:ppw-vs-freq}).
+Voltage states are labelled V1-V5, with increasing voltage; for these
+data, the firmware voltage table was not modified. To account for
+temperature effects, we held GPU die temperature at 34$\pm$2$^{\circ}$C. 
+
+The default voltage state (V4) with default frequency $f_{\mathrm{clock}}$=
+705~MHz yields a power efficiency of 13.6~GFLOPS/W. We find that
+the best power efficiency of 16.0~GFLOPS/W is achieved when using
+the lowest voltage state with $f_{\mathrm{clock}}$= 914~MHz, an
+increase of 18\%. The worst power efficiency is achieved when using
+the highest voltage level with its default $f_{\mathrm{clock}}$=758~MHz.
+The dip in power usage at $f_{\mathrm{clock}}$= 705~MHz when in
+the V2 state is likely due to the GPU selecting a low core voltage
+within the allowed range (see Table~\ref{tab:nvidia-smi}).
+
+\begin{figure}
+\subfloat[\label{fig:pow-vs-freq}Measured GPU power usage.]{\begin{centering}
+\includegraphics[width=0.495\columnwidth]{freq-offset-pow}
+\par\end{centering}
+
+}\subfloat[\label{fig:ppw-vs-freq}Measured GPU power efficiency.]{\begin{centering}
+\includegraphics[width=0.495\columnwidth]{freq-offset-ppw}
+\par\end{centering}
+
+}
+
+\protect\caption{GPU power usage and efficiency for \texttt{xGPU} code running on a
+K20 GPU, for default voltages (V1-V5) with frequency offsets of 0-300
+MHz over default $f_{\mathrm{clock}}$ settings (see Table \ref{tab:nvidia-smi}). }
+\end{figure}
+
+
+
+\subsection{Temperature dependence of power efficiency for constant voltage state\label{sub:Overclock-const-v}}
+
+Equation \ref{eq:sub-thr} predicts that subthreshold leakage current
+is proportional to $T^{2}e^{-b/T}$. To investigate this, we compared
+power usage of the GPU at various die temperatures (Figure~\ref{fig:const-v-pow}),where
+we have averaged multiple data into bins of $\pm1^{\circ}$C. In Figure~\ref{fig:const-v-pow},
+the clock frequency was set to 705, 805 and 905~MHz, with the default
+core voltage state (950-1062.5~mV). At all temperatures, power usage
+changes by a fixed $\sim0.14$~W/MHz. As clock frequency does not
+affect static power $P_{static}$, the offset between lines corresponds
+to the dynamic power $P_{\mathrm{dynamic}}$ component of the total
+power usage.
+
+We also see a non-linear increase of power consumption as a function
+of temperature; the simple linear model as presented in \citep{Hong:2010ie}
+is not sufficient. If we take into account $P_{\mathrm{dynamic}}$,
+we can fit a model , $P_{\mathrm{static}}=aT^{2}e^{-b/T}+c$ to all
+three runs (solid lines). For temperature in Kelvin, a least-square
+fit yields $a=1.00\pm0.23$, $b=3209.7\pm83.7$, $c=(148.9\pm0.2,\,162.7\pm0.2,\,176.9\pm0.2)$
+for 705, 805 and 905 MHz, respectively. 
+
+Power efficiency is improved as clock frequency is increased (Figure~\ref{fig:const-v-ppw}),
+from 705 MHz to 805 MHz, and again to 905 MHz. If we compare worst
+case (705~MHz at 90$^{\circ}$C) to best case (905~MHz at 30$^{\circ}$C),
+we see an 18\% difference in power efficiency. If we compare at constant
+$T$=30$^{\circ}$C, the performance at 905~MHz is 14.6~GFLOPS/W,
+as opposed to 13.5~GFLOPS/W at 705~MHz; an 8.1\% increase. 
+
+\begin{figure}
+\subfloat[\label{fig:const-v-pow}Measured GPU power usage.]{\begin{centering}
+\includegraphics[width=0.495\columnwidth]{pow-hold-v-vary-f}
+\par\end{centering}
+
+}\subfloat[\label{fig:const-v-ppw}Measured GPU power efficiency.]{\begin{centering}
+\includegraphics[width=0.495\columnwidth]{ppw-hold-v-vary-f}
+\par\end{centering}
+
+}
+
+\protect\caption{GPU power usage and efficiency for \texttt{xGPU} code running on a
+K20 GPU, with default core voltage (V4). Power usage shows a strong
+non-linear temperature dependence; this decreases performance per
+watt as temperature increases. }
+\end{figure}
+
+
+
+\subsection{Constant frequency, modified voltage}
+
+The default voltage states of the K20 are not fixed voltages, but
+rather a range (Table~\ref{tab:nvidia-smi}). To investigate the
+effect of voltage on power efficiency, we reprogrammed the K20's firmware
+so that the GPU core voltages V1-V5 were fixed to 900, 912.5, 925,
+950 and 987.5~mV, the lower bound of the default voltage ranges (Table~\ref{tab:nvidia-smi}).
+Power consumption as a function of temperature for the modified voltage
+levels V1-V5 is shown in Figure~\ref{fig:const-f-pow}, for a constant
+clock frequency of $f_{\mathrm{clock}}=$800~MHz; this is converted
+into performance per watt in Figure~\ref{fig:const-f-ppw}. We see
+that the highest core voltage state results in the worst power efficiency
+(at 30$^{\circ}$C) of 12.6~GFLOPS/W, in comparison to 14.7~GFLOPS/W
+for the lowest voltage state, and that as voltage is increased, power
+efficiency decreases. This corresponds to a 16.7\% difference in power
+efficiency between best and worst cases.
+
+Apparent in Figure~\ref{fig:const-f-pow} are jumps in the power
+usage, where the reported power consumption drops unexpectedly. These
+drops are repeatable and occur at different temperatures for different
+voltage states. We are uncertain as to the cause; however, \texttt{nvidia-smi}
+does not report any clock throttling and no decrease in performance
+(i.e. FLOPS) is seen. The altered voltage table (as written in the
+GPU's firmware) did not allow for different voltage states, and the
+K20 GPU does not employ temperature-dependent voltage scaling. As
+such, we conclude that this is due to an unknown off-chip (i.e. off-processor)
+effect. A possible explanation is that this is due to current-dependent
+efficiencies in power delivery of the regulators that supply the GPU
+die with power.
+
+\begin{figure}
+\subfloat[\label{fig:const-f-pow}Measured GPU power usage.]{\begin{centering}
+\includegraphics[width=0.495\columnwidth]{pow-hold-f-vary-v}
+\par\end{centering}
+
+}\subfloat[\label{fig:const-f-ppw}Measured GPU power efficiency.]{\begin{centering}
+\includegraphics[width=0.495\columnwidth]{ppw-hold-f-vary-v}
+\par\end{centering}
+
+}
+
+\protect\caption{GPU power usage and efficiency for \texttt{xGPU} code running on a
+K20 GPU, with a core clock frequency of 800 MHz and varying voltage
+levels (see Table \ref{tab:nvidia-smi}). Lower voltage levels correspond
+to higher power efficiency.}
+\end{figure}
+
+
+
+\subsection{Tuning voltage and frequency\label{sub:best-ppw}}
+
+The best performance per watt is achieved when undervolting and overclocking
+the GPU, as predicted in Section~\ref{sub:Maximizing-power-efficiency}
+(Table~\ref{tab:pow-eff}). At 900~mV, \texttt{xGPU} code execution
+fails and the GPU froze when attempting to run the code at 1005~MHz.
+At 955~MHz, the code ran successfully but the output failed verification
+when GPU temperature was above 70$^{\circ}$C; that is, it did not
+match the output of reference CPU code. No errors were found for temperatures
+below 70$^{\circ}$C. At 875~mV, we achieved a maximum clock frequency
+of 905~MHz, but again found that GPU output did not pass verification
+for temperatures above 70$^{\circ}$C. Due to the temperature dependence
+on power, temperature is held fixed at 50$^{\circ}$C. The frequencies
+shown in Table~\ref{tab:pow-eff-vf} correspond to a fixed frequency
+offset of 312 MHz over the default K20 clock speeds. Similarly, the
+voltages shown in Table~\ref{tab:pow-eff-fixed-f} correspond to
+the lower bound of the K20's default voltage levels V1-V5. Table~\ref{tab:pow-eff-fixed-v}
+compares the V4 default (950-1062.5 mV) against a lowered voltage
+of 875~mV.
+
+For $(V,\, f_{\mathrm{clock}},T)$ = (875~mV, 905~MHz, 30$^{\circ}$C),
+we achieved 18.3~GFLOPS/W for the \texttt{xGPU} code. For comparison,
+the K20 default of $(V,\, f_{\mathrm{clock}},T)$ = (950-1062.5~mV,
+705~MHz, 30$^{\circ}$C) yields 13.5~GFLOPS/W for the same code,
+degrading to 12.4~GFLOPS/W at 90$^{\circ}$C. This means that by
+controlling GPU temperature, voltage, and clock frequency, we are
+able to increase performance per watt by 37-48\% over default settings.\captionsetup{position=top}
+
+\begin{table}
+\begin{centering}
+\protect\caption{Power efficiency (at 50$^{\circ}$C) and benchmarks for \texttt{xGPU}
+code as a function of voltage and clock frequency.\label{tab:pow-eff}}
+\subfloat[\label{tab:pow-eff-vf}Power efficiency for maximum attained clock
+frequencies at given voltage levels. ]{\centering{}{\footnotesize{}}%
+\begin{tabular}{ccccc}
+{\footnotesize{}Clock Frequency} & {\footnotesize{}Voltage} & {\footnotesize{}Power} & {\footnotesize{}Benchmark} & {\footnotesize{}Power efficiency}\tabularnewline
+{\footnotesize{}(MHz)} & {\footnotesize{}(mV)} & {\footnotesize{}(W)} & {\footnotesize{}(GFLOPS)} & {\footnotesize{}(GFLOPS/W)}\tabularnewline
+\hline 
+\hline 
+{\footnotesize{}1070} & {\footnotesize{}987.5} & {\footnotesize{}222.2} & {\footnotesize{}3094} & {\footnotesize{}13.9}\tabularnewline
+{\footnotesize{}1017} & {\footnotesize{}950.0} & {\footnotesize{}197.1} & {\footnotesize{}2940} & {\footnotesize{}14.9}\tabularnewline
+{\footnotesize{}978} & {\footnotesize{}925.0} & {\footnotesize{}186.9} & {\footnotesize{}2826} & {\footnotesize{}15.1}\tabularnewline
+{\footnotesize{}952} & {\footnotesize{}912.5} & {\footnotesize{}175.6} & {\footnotesize{}2750} & {\footnotesize{}15.7}\tabularnewline
+{\footnotesize{}926} & {\footnotesize{}900.0} & {\footnotesize{}168.5} & {\footnotesize{}2674} & {\footnotesize{}15.9}\tabularnewline
+{\footnotesize{}905} & {\footnotesize{}875.0} & {\footnotesize{}144.4} & {\footnotesize{}2636} & {\footnotesize{}18.3}\tabularnewline
+\hline 
+\end{tabular}}
+\par\end{centering}
+
+\begin{centering}
+\subfloat[\label{tab:pow-eff-fixed-f}Power efficiency and benchmarks for a
+fixed 926 MHz clock at varying voltage levels.]{\centering{}{\footnotesize{}}%
+\begin{tabular}{ccccc}
+{\footnotesize{}Clock Frequency} & {\footnotesize{}Voltage} & {\footnotesize{}Power} & {\footnotesize{}Benchmark} & {\footnotesize{}Power efficiency}\tabularnewline
+{\footnotesize{}(MHz)} & {\footnotesize{}(mV)} & {\footnotesize{}(W)} & {\footnotesize{}(GFLOPS)} & {\footnotesize{}(GFLOPS/W)}\tabularnewline
+\hline 
+\hline 
+{\footnotesize{}926} & {\footnotesize{}987.5} & {\footnotesize{}199.0} & {\footnotesize{}2674} & {\footnotesize{}13.4}\tabularnewline
+{\footnotesize{}926} & {\footnotesize{}950.0} & {\footnotesize{}183.1} & {\footnotesize{}2674} & {\footnotesize{}14.6}\tabularnewline
+{\footnotesize{}926} & {\footnotesize{}925.0} & {\footnotesize{}179.4} & {\footnotesize{}2674} & {\footnotesize{}14.9}\tabularnewline
+{\footnotesize{}926} & {\footnotesize{}912.5} & {\footnotesize{}172.0} & {\footnotesize{}2674} & {\footnotesize{}15.5}\tabularnewline
+{\footnotesize{}926} & {\footnotesize{}900.0} & {\footnotesize{}168.5} & {\footnotesize{}2674} & {\footnotesize{}15.9}\tabularnewline
+\hline 
+\end{tabular}}
+\par\end{centering}
+
+\centering{}\subfloat[\label{tab:pow-eff-fixed-v} Comparison of power efficiency and benchmarks
+at default voltages to a lowered voltage of 875 mV, for various clock
+frequencies.]{\centering{}{\footnotesize{}}%
+\begin{tabular}{ccccc}
+{\footnotesize{}Clock Frequency} & {\footnotesize{}Voltage} & {\footnotesize{}Power} & {\footnotesize{}Benchmark} & {\footnotesize{}Power efficiency}\tabularnewline
+{\footnotesize{}(MHz)} & {\footnotesize{}(mV)} & {\footnotesize{}(W)} & {\footnotesize{}(GFLOPS)} & {\footnotesize{}(GFLOPS/W)}\tabularnewline
+\hline 
+\hline 
+{\footnotesize{}705} & {\footnotesize{}950.0 - 1062.5} & {\footnotesize{}153.9} & {\footnotesize{}2064} & {\footnotesize{}13.4}\tabularnewline
+{\footnotesize{}805} & {\footnotesize{}950.0 - 1062.5} & {\footnotesize{}167.5} & {\footnotesize{}2330} & {\footnotesize{}13.9}\tabularnewline
+{\footnotesize{}905} & {\footnotesize{}950.0 - 1062.5} & {\footnotesize{}181.6} & {\footnotesize{}2636} & {\footnotesize{}14.5}\tabularnewline
+\hline 
+{\footnotesize{}705} & {\footnotesize{}875.0} & {\footnotesize{}122.1} & {\footnotesize{}2064} & {\footnotesize{}16.9}\tabularnewline
+{\footnotesize{}805} & {\footnotesize{}875.0} & {\footnotesize{}132.6} & {\footnotesize{}2330} & {\footnotesize{}17.5}\tabularnewline
+{\footnotesize{}905} & {\footnotesize{}875.0} & {\footnotesize{}144.4} & {\footnotesize{}2636} & {\footnotesize{}18.1$^{a}$}\tabularnewline
+\hline 
+\multicolumn{5}{c}{{\footnotesize{}$^{a}$output from the GPU does not pass validation
+for temperatures >70$^{\circ}$C.}}\tabularnewline
+\end{tabular}}
+\end{table}
+\captionsetup{position=bottom}
+
+
+\section{Discussion\label{sec:Discussion}}
+
+Our results show that temperature has a nontrivial impact on GPU power
+efficiency. This is primarily due to leakage current, which scales
+in proportion to $T^{2}e^{-b/T}$. Optimum power efficiency is achieved
+when GPU supply voltage is lowered and clock frequency is raised,
+while temperature is kept low. We find efficiency can be increased
+by as much as 48\% on an NVIDIA K20 through this technique. 
+
+We have demonstrated a $\sim$30~W decrease on a GPU power consumption
+of 154~W by changing GPU core voltage state, a 20\% reduction (Table~\ref{tab:pow-eff-fixed-v}).
+Coupled with an increase in GPU clock frequency, we were able to increase
+performance from 2064 GFLOPS to 2636 GFLOPS for our code --- a 28\%
+increase --- while simultaneously decreasing power usage by 10~W. 
+
+For large installations, even a small change in power efficiency can
+have significant cost benefits. For example, the Titan supercomputer
+has 18,688 K20X GPUs; if each GPU consumed 10~W less power, over
+0.18~MW of power would be saved. At \$0.10/kWh, this equates to \$18.68/h,
+or roughly \$163k/yr. In the following subsections, we discuss the
+relevance of results presented here to future HPC installations and
+GPU design.
+
+We have presented results from a single GPU. In actuality, the same
+chips from within the same process will have a distribution of values
+(dynamic power, leakage power, etc.), so a degree of conservatism
+is required in setting device parameters for mass production. Allowing
+clock frequency and core voltage to be set at run-time by the user,
+or adjusted automatically using dynamic voltage and frequency scaling
+techniques (DVFS), may provide a mechanism with which to boost power
+efficiency over conservative defaults.
+
+
+\subsection{Application-aware DVFS}
+
+When clock frequencies are chosen for a GPU, it is typical to choose
+clock frequencies that can support a wide range range of workloads.
+For example, codes such as \texttt{DGEMM} (double-precision general
+dense matrix multiply) consume more power than the single-precision
+\texttt{xGPU} code, but must still run within the TDP at default clock
+frequency. It follows that there will always be a significant boost
+in clock frequencies possible for applications that do not run close
+to the TDP limit. One could imagine a control system that automatically
+adjusts clock frequency and voltage, depending upon application and
+desired performance optimization (e.g. FLOPS/W or FLOPS). This would
+be a form of DVFS. Such an application-dependent frequency and voltage
+scaling system\emph{ (A-DVFS}) could offer a way to automatically
+boost power efficiency and performance of codes: by analyzing their
+power usage and adjusting clock rates and voltages according to a
+user's desired optimization. Such a system could also accommodate
+applications that require perfect load balancing or reduced system
+jitter by setting clock frequencies uniformly across all devices used
+by the application, although the highest achievable frequency will
+be limited to that of the slowest device.
+
+Indeed, the NVIDIA GPU Boost feature%
+\footnote{\href{http://www.nvidia.com/content/PDF/kepler/nvidia-gpu-boost-tesla-k40-06767-001-v02.pdf}{http://www.nvidia.com/content/PDF/kepler/nvidia-gpu-boost-tesla-k40-06767-001-v02.pdf}%
+}, launched with the K40 series GPU, allows users to select from two
+preset higher clocks though \texttt{\small{}nvidia-smi}, boosting
+performance for codes that run below TDP. GPU Boost is implemented
+differently on the GeForce-class gaming cards: core frequency is scaled
+to maintain card power consumption close to TDP. Adding similar dynamic
+frequency scaling functionality to server-class GPUs may increase
+both power efficiency and performance for codes with low power consumption.
+
+
+\subsection{Temperature-aware DVFS}
+
+Temperature and TDP limit the range of clock frequencies and supply
+voltage combinations. The default settings for GPUs are chosen specifically
+to ensure that neither temperature or TDP tolerances are exceeded
+for any application. In contrast, best power efficiency occurs when
+voltages are lowered and clock frequency raised in accordance with
+operating temperature. 
+
+A hypothetical temperature-aware voltage and frequency scaling system
+\emph{(T-DVFS}) could raise and lower core voltages automatically,
+based on the GPU die temperature. If cooling systems maintained lower
+temperatures, the T-DVFS system would accordingly lower voltage, increasing
+power efficiency.
+
+
+\subsection{Cooling Systems}
+
+Optimization of overall power efficiency of a GPU-based HPC system
+depends also on the power consumed by cooling subsystems. In our tests,
+we used a water-based direct cooling system, as it is a more efficient
+cooling technique than forced air cooling; Januszewskia et al. report
+that water-based cooling systems can reduce the total power consumed
+by a server room by more than 15\% \citep{Januszewskia:vu}. For our
+single-node system, we achieve better power efficiency even without
+factoring in any power savings from the water-based cooling system.
+
+For multi-node systems with greater power dissipation, how to achieve
+optimal performance is less clear. Should GPUs be only just kept within
+operational tolerances, or should they be maintained at a lower temperature?
+Let us start by considering only GPU die temperature as a free parameter
+to optimize. In this case, there is a direct trade-off between GPU
+power consumption and cooling system power consumption. For example,
+if a cooling systems consumed an extra 100~W per GPU to maintain
+a temperature of 30$^{\circ}$C instead of 80$^{\circ}$C, this would
+outweigh the $\sim$30~W savings in GPU power consumption reported
+here, resulting in an overall decrease in power efficiency (see Section~\ref{sub:Overclock-const-v}). 
+
+While warm water cooling techniques show great promise, it should
+be noted that energy savings within the cooling systems may not correspond
+to optimal overall power efficiency. An IBM Aquasar system demonstrated
+an exergetic efficiency increase of 34\% through use of warm water
+(60$^{\circ}$C) cooling \citep{Zimmermann:2012fv}, although power
+consumption of electronics increased by $7\pm1\%$ as the coolant
+temperature increases from 30$^{\circ}$C to 60$^{\circ}$C. 
+
+Things get more interesting once we start to consider that lower temperatures
+allow higher clock rates for a given supply voltage. In Section~\ref{sub:best-ppw}
+above, we showed that the difference between worst-case default and
+best-case power efficiencies for the K20 GPU running \texttt{xGPU}
+code is 48\%; we did not consider the power required for cooling systems,
+$P_{\mathrm{cool}}$. If we modify Equation \ref{eq:pow-eff} to include
+$P_{\mathrm{cool}}$ and other infrastructure sources, we instead
+wish to optimize
+\begin{equation}
+\eta_{\mathrm{pow}}(V,f,T)=\frac{N_{\mathrm{OPS}}(V,f,T)}{P_{\mathrm{sys}}(V,f,T)+P_{\mathrm{cool}}(T)+...},\label{eq:optimize-eff-temp}
+\end{equation}
+where the denominator is the sum of the power over the entire system.
+Here, we have explicitly written $P_{\mathrm{sys}}$ and $P_{\mathrm{cool}}$
+as functions of temperature. Using Equation~\ref{eq:optimize-eff-temp}
+as a basis for finding optimal power efficiency for a given code differs
+from past techniques as it considers the system as a whole, with regards
+to the fundamental physics that governs power usage of the underlying
+microarchitecture. 
+
+A novel aspect of Equation~\ref{eq:optimize-eff-temp} is that it
+predicts that lowering temperature may lead to increased power efficiency,
+which appears somewhat in conflict to previous findings that report
+lower data center energy consumption at higher temperatures (e.g.
+\citep{Zimmermann:2012fv,googlePUE}). There are two main reasons
+this discrepancy arises. Firstly, general-purpose data centers focus
+on optimizing power usage effectiveness (PUE, \citep{Azevedo:2012tv}),
+as opposed to performance per watt, which is of more interest to HPC
+systems. PUE is defined as
+\[
+{\rm PUE=\frac{total\, facility\, energy}{IT\, equipment\, energy},}
+\]
+where total facility energy is the data center's total energy usage,
+and IT equipment energy is the sum of all computing, storage and network
+equipment energy usage. Unlike performance per watt, PUE does not
+directly consider the computational performance of a system. Secondly,
+previous comparisons between cooling methods do not account for temperature-dependent
+optimization of supply voltage and clock frequency. 
+
+
+\section{Conclusions\label{sec:Conclusions}}
+
+One of the main challenges facing exascale HPC is dramatically reducing
+the power usage of large HPC systems. We have shown that temperature-aware
+optimization of core clock frequency and supply voltage can increase
+performance of a GPU code by up to 48\% on an NVIDIA Tesla K20. This
+increase was achieved by increasing the GPU clock frequency and decreasing
+supply voltage while maintaining a die temperature of 30$^{\circ}$C.
+
+It is taken for granted that code must be optimized for different
+architectures in order to fairly compare compute performance. In contrast,
+when optimizing power efficiency for HPC systems, the effect of temperature
+upon optimal GPU core frequency and voltage is generally not considered.
+Two possible mechanisms that may allow for better performance per
+watt are temperature-aware and application-dependent frequency and
+voltage scaling (T-DVFS and A-DVFS). Incorporation of these or similar
+techniques into future GPU DVFS systems may yield greater computational
+performance with reduced power consumption by automatically tuning
+core frequency and voltage with consideration of both application
+code and thermal environment.
+
+
+\section*{Acknowledgements}
+
+The authors acknowledge support from NSF grants PHYS-080357, AST-1106059,
+and OIA-1120587. BB thanks the NVIDIA internship program for support.
+
+\bibliographystyle{unsrtnat}
+\addcontentsline{toc}{section}{\refname}\bibliography{greengpu}
+
+\end{document}

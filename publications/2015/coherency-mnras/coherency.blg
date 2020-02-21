@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: coherency.aux
+The style file: mn2e-lyx/mn2e.bst
+Database file #1: references.bib
+You've used 33 entries,
+            2938 wiz_defined-function locations,
+            835 strings with 8938 characters,
+and the built_in function-call counts, 13290 in all, are:
+= -- 1140
+> -- 780
+< -- 7
++ -- 270
+- -- 253
+* -- 1020
+:= -- 2544
+add.period$ -- 6
+call.type$ -- 33
+change.case$ -- 214
+chr.to.int$ -- 43
+cite$ -- 33
+duplicate$ -- 558
+empty$ -- 891
+format.name$ -- 295
+if$ -- 2596
+int.to.chr$ -- 3
+int.to.str$ -- 1
+missing$ -- 29
+newline$ -- 103
+num.names$ -- 135
+pop$ -- 188
+preamble$ -- 1
+purify$ -- 205
+quote$ -- 0
+skip$ -- 514
+stack$ -- 0
+substring$ -- 613
+swap$ -- 46
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 285
+warning$ -- 0
+while$ -- 147
+width$ -- 0
+write$ -- 334

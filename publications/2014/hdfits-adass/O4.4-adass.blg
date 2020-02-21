@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: O4.4-adass.aux
+The style file: asp2010.bst
+Database file #1: hdfidi.bib
+Warning--string name "n/a" is undefined
+--line 51 of file hdfidi.bib
+Warning--string name "n/a" is undefined
+--line 273 of file hdfidi.bib
+Warning--string name "n/a" is undefined
+--line 365 of file hdfidi.bib
+Warning--string name "n/a" is undefined
+--line 374 of file hdfidi.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+You've used 20 entries,
+            3204 wiz_defined-function locations,
+            971 strings with 9170 characters,
+and the built_in function-call counts, 10218 in all, are:
+= -- 782
+> -- 392
+< -- 15
++ -- 150
+- -- 129
+* -- 680
+:= -- 1618
+add.period$ -- 1
+call.type$ -- 20
+change.case$ -- 114
+chr.to.int$ -- 19
+cite$ -- 20
+duplicate$ -- 814
+empty$ -- 858
+format.name$ -- 198
+if$ -- 2077
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 154
+newline$ -- 68
+num.names$ -- 80
+pop$ -- 353
+preamble$ -- 1
+purify$ -- 134
+quote$ -- 0
+skip$ -- 363
+stack$ -- 0
+substring$ -- 401
+swap$ -- 321
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 180
+warning$ -- 0
+while$ -- 77
+width$ -- 0
+write$ -- 197
+(There were 4 warnings)

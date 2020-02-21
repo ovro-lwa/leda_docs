@@ -1,0 +1,1210 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+% This is the aspauthor.tex LaTeX file
+% Copyright 2010, Astronomical Society of the Pacific Conference Series
+
+\usepackage{asp2010}
+
+
+\resetcounters
+
+%\bibliographystyle{asp2010}
+
+\markboth{D. C. Price, B. R. Barsdell, L. J. Greenhill}{Is HDF5 a good format to replace UVFITS?}
+
+\renewcommand\maketitle{}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Is HDF5 a good format to replace UVFITS?
+\end_layout
+
+\begin_layout Author
+Danny
+\begin_inset space ~
+\end_inset
+
+C.
+\begin_inset space ~
+\end_inset
+
+Price
+\begin_inset Formula $^{1}$
+\end_inset
+
+, Benjamin R.
+ Barsdell
+\begin_inset Formula $^{1}$
+\end_inset
+
+, and Lincoln J.
+ Greenhill
+\begin_inset Formula $^{1}$
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+affil
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $^{1}$
+\end_inset
+
+Harvard-Smithsonian Center for Astrophysics, MS 42 60 Garden Street, Cambridge
+ MA 02143
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Abstract
+The FITS (Flexible Image Transport System) data format was developed in
+ the late 1970s for storage and exchange of astronomy-related image data.
+ Since then, it has become a standard file format not only for images, but
+ also for radio interferometer data (e.g.
+ UVFITS, FITS-IDI)
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+, and single dish data (e.g.
+ MBFITS, SDFITS)
+\end_layout
+
+\end_inset
+
+.
+ But is FITS the right format for next-generation telescopes to adopt? The
+ newer Hierarchical Data Format (HDF5) file format offers considerable advantage
+s over FITS, but has yet to gain widespread adoption within radio astronomy.
+ One of the major holdbacks is that HDF5 is not well supported by data reduction
+ software packages
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+e, such as AIPS and MIRIAD and CASA (some existing support)
+\end_layout
+
+\end_inset
+
+.
+ Here, we present a comparison of FITS, HDF5, and the MeasurementSet (MS)
+ format for storage of interferometric data.
+ In addition, we present a tool for converting between formats.
+ We show that the underlying data model of FITS can be ported to HDF5, a
+ first step toward achieving wider HDF5 support.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The Flexible Image Transport System (FITS) data format is the most widespread
+ standard for the storage and exchange of datasets within astronomy.
+ Since its inception 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "1979ipia.coll..445W,1980SPIE..264..298G"
+
+\end_inset
+
+, FITS has enjoyed several decades of widespread usage.
+ The success of FITS has been attributed in part to the guiding maxim 
+\begin_inset Quotes eld
+\end_inset
+
+once FITS, always FITS
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "2003ASSL..285...71G"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+: that changes to the standard must be incremental and must not break backward
+ compability
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+ and does not fundamentally change the nature of the format
+\end_layout
+
+\end_inset
+
+.
+ For this reason, it is familiar to many generations of astronomers,
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+, and is supported by myriad software packages.
+\end_layout
+
+\end_inset
+
+ and a large ecosystem of software 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+and support
+\end_layout
+
+\end_inset
+
+ has in turn motivated further adoption of the standard.
+ In particular, the 
+\family typewriter
+CFITSIO
+\family default
+ library (ascl:1010.001) 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+ffers convenient subroutines in C and Fortran
+\end_layout
+
+\end_inset
+
+ for the reading and writing of FITS files has become the 
+\emph on
+de facto
+\emph default
+ standard.
+\end_layout
+
+\begin_layout Standard
+FITS has necessarily evolved over the years, with the addition of features
+ such as random groups 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "1981A&AS...44..371G"
+
+\end_inset
+
+, tables 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Harten1998,Cotton1995"
+
+\end_inset
+
+, and compression 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "2002SPIE.4847..444P"
+
+\end_inset
+
+; FITS is now officially at version 3.0 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "2010A&A...524A..42P"
+
+\end_inset
+
+.
+ However, these changes have been relatively minor iterations upon the core
+ FITS format.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ This now limits the flexibility of FITS.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+ new data storage concepts and methods provide many advantages that cannot
+ be leveraged without a drastic overhaul of the FITS standard, or migration
+ to a new standard.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The limitiations of FITS have been previously acknowledged and documented,
+ for example in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "2014ASPC..485..351T"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset citation
+LatexCommand citeauthor
+key "Thomas:2014vq"
+
+\end_inset
+
+ (in press).
+ In 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Kitaeff:2014ua"
+
+\end_inset
+
+, the authors consider JPEG2000 as an alternative format for astronomical
+ images.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "2001ASPC..238..487T"
+
+\end_inset
+
+ discuss advantages of converting FITS files to XML; 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Jennings1995"
+
+\end_inset
+
+ considered HDF4 as a format.
+ Here, we consider the immediate, practicable advantages of HDF5 (Hierarchical
+ Data Format) as a data storage format for visibility data.
+ We show that data in FITS format can be converted in a straightforward
+ fashion to HDF5 format, and that conventions for the storage of visibility
+ data can be ported to HDF5.
+\end_layout
+
+\begin_layout Subsection
+Definitions
+\end_layout
+
+\begin_layout Standard
+In order to discuss data storage methods and file formats without ambiguity,
+ we first need to clarify our vocabulary:
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Data model:
+\emph default
+ a high-level, conceptual model of data, types of data, and how data are
+ organized, e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+group
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+dataset
+\begin_inset Quotes erd
+\end_inset
+
+.
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+These may be high-level concepts, such as a 
+\begin_inset Quotes eld
+\end_inset
+
+group
+\begin_inset Quotes erd
+\end_inset
+
+, or a 
+\begin_inset Quotes eld
+\end_inset
+
+dataset
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Data schema: 
+\emph default
+a lower-level, domain-specific ontology (i.e.
+ framework that gives meaning) of how data and metadata are arranged inside
+ a data model.
+ 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+For example, a schema may define a set of rules for the names of attributes
+ and datasets, and how data are organized within the data model.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Storage model:
+\emph default
+ how objects from the data model are mapped to bytes within an address space
+ on storage media
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+ (such as a hard drive)
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Convention: 
+\emph default
+a documented data schema that has widespread acceptance within a community
+ of users.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Standard: 
+\emph default
+the acknowledged, formal specification of a file format.
+ A standard may or may not define acceptable data models and schema.
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+, but should provide an application programming interface API.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From this view, the data model can be seen as 
+\emph on
+syntax
+\emph default
+, while the data schema may be seen as the ontology that gives 
+\emph on
+semantics
+\emph default
+.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Without a well-defined schema, the underlying meaning of the dataset may
+ be unclear, rendering the data useless.
+\end_layout
+
+\end_inset
+
+ Neither the FITS nor HDF5 standards define data schema; however there are
+ registered FITS conventions
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://fits.gsfc.nasa.gov/fits_registry.html}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ for certain classes of data.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+For FITS files, the data model is closely tied to the storage model; in
+ contrast HDF5 allows abstract data models that are divorced from the subtleties
+ of the storage model.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conventions for visibility data storage
+\end_layout
+
+\begin_layout Subsection
+FITS-IDI and UVFITS
+\end_layout
+
+\begin_layout Standard
+There are two registered FITS conventions for the storage of visibility
+ data from synthesis imaging radio telescopes
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+We refer the reader to 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Thompson2004"
+
+\end_inset
+
+ for an introduction to interferometric synthesis imaging techniques
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+: FITS-IDI 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Griesen:2008tn"
+
+\end_inset
+
+, and UVFITS 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Greisen:2012tw"
+
+\end_inset
+
+.
+ Both these formats store not only the visiblility data, but also metadata
+ such as antenna positions, information on observation setup, and calibration
+ tables.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Visibility data can be expressed as a multidimensional array, often referred
+ to as a 'visibility matrix'.
+ This matrix has axes corresponding to integration number, baseline, frequency
+ channel, and the corresponding complex visibility (more complex observations
+ may require more axes).
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+, to acommodate multiple phase centers and/or frequency setups.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The two visibility data conventions share many keywords and unit definitions,
+ but their schema and underlying storage models differ.
+ In UVFITS, the visibility data are stored in a random group HDU (header
+ data unit), whereas in FITS-IDI data are stored in a binary table HDU.
+ In both formats, each row of the table contains columns for the timestamp
+ and a baseline identifier, along with the multidimensional visibility array
+ for that timestamp and baseline.
+\end_layout
+
+\begin_layout Subsection
+CASA MeasurementSets
+\end_layout
+
+\begin_layout Standard
+An alternative file format for visibility data is the MeasurementSet (MS;
+ 
+\begin_inset CommandInset citation
+LatexCommand citealp
+key "Kemball:2001um"
+
+\end_inset
+
+).
+ This format is used by the CASA reduction package (ascl:1107.013) and related
+ software
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+, for which defacto file I/O API is given by the casacore library
+\end_layout
+
+\end_inset
+
+.
+ The storage model for the MS format is a directory consisting of several
+ data files nested inside child directories.
+ Unlike FITS and HDF5, MS has no in-built data compression capability.
+ Visibility data are stored in the MAIN table; this also provides keys to
+ the various subtables that provide instrument and observation metadata.
+ The MS standard defines data schema for images, visibility data and single-dish
+ data.
+ The MS data model differ significantly to FITS, meaning that conversion
+ requires a non-trivial mapping.
+ For example, MS files have no equivalent to the FITS HDU, and while FITS-IDI
+ assigns an integer ID for every baseline, MS uses a pair of antenna IDs.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Subsection
+Limitations of the FITS format
+\end_layout
+
+\begin_layout Plain Layout
+Since the conception of FITS, astronomical datasets and their corresponding
+ processing requirements have grown by many orders of magnitude.
+ As a point of reference, the world's first gigabyte-capacity hard drive
+ -- the IBM 3380 -- weighed 249 kg and was the size of a refrigerator; this
+ was released in 1980.
+ Modern-day telescopes can produce this amount of data in under a second.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+There are three key questions that must be addressed:
+\end_layout
+
+\begin_layout Itemize
+What does FITS do poorly or simply not support? 
+\end_layout
+
+\begin_layout Itemize
+What advantages and extra features do other formats have? 
+\end_layout
+
+\begin_layout Itemize
+What are the disadvantages of migration to a new format? 
+\end_layout
+
+\begin_layout Plain Layout
+We focus on HDF5 as a
+\end_layout
+
+\begin_layout Plain Layout
+I/O speeds have not been following Moore's law.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+MeerKat, CHIME, LEDA and LOFAR are already using HDF5
+\end_layout
+
+\begin_layout Itemize
+80 Character limit on headers.
+ 
+\end_layout
+
+\begin_layout Itemize
+I/O speed.
+ 
+\end_layout
+
+\begin_layout Itemize
+No parallel I/O support.
+ 
+\end_layout
+
+\begin_layout Itemize
+Limited compression support.
+ 
+\end_layout
+
+\begin_layout Itemize
+Lack of extensibility.
+ Units / errors / missing values.
+ 
+\end_layout
+
+\begin_layout Itemize
+Future instrument data volumes.
+ 
+\end_layout
+
+\begin_layout Section
+Comparison of data formats
+\end_layout
+
+\begin_layout Plain Layout
+HDF5, MS, and FITS.
+ JPEG2000 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Kitaeff:2014ua"
+
+\end_inset
+
+ Starlink HDS 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Jenness:2014wy"
+
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Plain Layout
+NetCDF now uses HDF5 as an underlying data container.
+\end_layout
+
+\begin_layout Plain Layout
+CASA is fortran ordering, while HDF5 is C
+\end_layout
+
+\begin_layout Plain Layout
+Why not netCDF / JSON / SQL / nodb / VOTables / etc?
+\end_layout
+
+\begin_layout Subsection
+Disadvantages of HDF5
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+HDF5 for visibility storage
+\end_layout
+
+\begin_layout Standard
+There are several advantages of the HDF5 format over both FITS and MS, the
+ most compelling of these are improvements to the storage model that are
+ beneficial for large datasets.
+ For example, HDF5 provides parallel and network I/O, data chunking methods,
+ external (i.e.
+ distributed) object storage, and a filter pipeline for data compression.
+ Of specific interest for visibility data is 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+The CHIME project 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Bandura2014"
+
+\end_inset
+
+ has implemented
+\end_layout
+
+\end_inset
+
+ 
+\family typewriter
+bitshuffle
+\family default
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{https://github.com/kiyo-masui/bitshuffle}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, an HDF5 filter designed for fast compression of visibility data.
+ Using 
+\family typewriter
+bitshuffle
+\family default
+ on a 1.2 GB test dataset of data from the LEDA correlator 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Kocz:2014jr"
+
+\end_inset
+
+, we achieved lossless compression ratio of 1.65x, with total file compression
+ and write time of 7.5 s; in comparison the data compressed by 1.40x in 53.0
+ s using standard 
+\family typewriter
+gzip
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+HDF5 is already in limited use within astronomy, but no general convention
+ for visibility data storage currently exists.
+ The LOFAR radio telescope has developed conventions specifically for storage
+ of LOFAR data 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "2011ASPC..442..663W,2012ASPC..461..283A"
+
+\end_inset
+
+, and the (unfunded) AstroHDF effort sought to explore HDF5 for astronomical
+ datasets further 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "2012ASPC..461..871M"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Jennings1995"
+
+\end_inset
+
+ sought to convert between FITS and HDF4, this was complicated by limitations
+ of the HDF4 format.
+ These shortcomings are addressed in HDF5, and there is now no impediment
+ to mapping the FITS data model into the HDF5 data model.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conversion between FITS and HDF5
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename fits2hdf.pdf
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Diagram showing the mapping of the FITS data structures into the HDF5 data
+ model.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While there are many possible mappings, one of the simplest is to map the
+ FITS HDU structure to a HDF5 
+\emph on
+group
+\emph default
+, FITS cards to HDF5 
+\emph on
+attributes
+\emph default
+, and the FITS data payloads to HDF5 
+\emph on
+datasets
+\emph default
+ (Fig 1).
+ A similar approach is being undetaken to port the N-dimensional data format
+ (NDF) to HDF5 (
+\begin_inset CommandInset citation
+LatexCommand citeauthor
+key "Jenness:2014wy"
+
+\end_inset
+
+, in press).
+ The hierarchical nature of HDF5 allows the header unit and
+\emph on
+ 
+\emph default
+data unit within the FITS HDU to be mapped to HDF5 groups within a parent
+ group; similarly, in the case of FITS tables, each column can be mapped
+ to a separate dataset
+\emph on
+ 
+\emph default
+within a parent group.
+ All FITS data types (e.g.
+ float32) have HDF5 equivalents.
+\end_layout
+
+\begin_layout Standard
+We have implemented a utility called 
+\family typewriter
+fits2hdf
+\family default
+\emph on
+ 
+\emph default
+that uses this mapping to convert FITS files into HDF5 format
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{https://github.com/telegraphic/fits2hdf}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ This utility is written in Python, and uses the PyFITS (ascl:1207.009) and
+ h5py
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://www.h5py.org/}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ libraries for file I/O.
+ These 
+\begin_inset Quotes eld
+\end_inset
+
+HDFITS
+\begin_inset Quotes erd
+\end_inset
+
+ files have an additional attribute in the root to identify them as having
+ a HDFITS data model.
+ While 
+\family typewriter
+fits2hdf
+\family default
+ was designed to port UVFITS/FITS-IDI data into HDF5, any valid FITS file
+ may be converted by this utility.
+ As the HDFITS data model is a restricted subset of the complete HDF5 data
+ model, any HDFITS file may be converted back into a FITS file without complicat
+ion.
+ 
+\end_layout
+
+\begin_layout Standard
+A similar approach can be taken with MS files, converting them into 
+\begin_inset Quotes eld
+\end_inset
+
+HDF-MS
+\begin_inset Quotes erd
+\end_inset
+
+ data models within HDF5.
+ This functionality is provided by a separate utility, 
+\family typewriter
+ms2hdf
+\family default
+, provided as part of the 
+\family typewriter
+fits2hdf
+\family default
+ package.
+ 
+\end_layout
+
+\begin_layout Section
+Conclusions 
+\end_layout
+
+\begin_layout Standard
+By porting the FITS and MS data models to HDF5, we may begin to leverage
+ the advantages of HDF5.
+ Doing so maintains familiarity to users and allows conversion back into
+ FITS/MS.
+ This also limits the amount of modification required for existing programs
+ to read, write and understand HDF5-stored data.
+ 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Future work will compare FITS and HDF5 compression algorithms and I/O benchmarki
+ng.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+acknowledgements
+\end_layout
+
+\end_inset
+
+ This work was supported by NSF grants OIA­-1125087, AST-1106059, and OCI­-10600
+67.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "hdfidi"
+options "asp2010"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
